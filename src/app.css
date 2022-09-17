@@ -1,0 +1,129 @@
+/* CSS Mini Reset */
+
+@font-face {
+  font-family: 'Monument Extended';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/MonumentExtended-Regular low.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Syne';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/Syne-Medium.woff2') format('woff2');
+}
+
+:root {
+  --accent-color: #c90e3b;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+form,
+input,
+fieldset,
+legend,
+caption,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre {
+  font-family: 'Syne';
+  font-size: 100%;
+  font-weight: normal;
+
+  margin: 0;
+  padding: 0;
+
+  vertical-align: baseline;
+
+  border: 0;
+  outline: 0;
+  background: transparent;
+
+  line-height: 1;
+
+  -webkit-appearance: none;
+}
+
+table {
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+}
+
+img {
+  border: 0;
+}
+
+body {
+  background-color: #0a0a0a;
+}
+
+svg {
+  display: flex;
+}
+
+button {
+  -webkit-appearance: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+input {
+  background-color: #1D1D1D;
+  padding: 0;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 2px solid transparent;
+  transition: 100ms;
+  height: 42px;
+}
+
+input[type="number"] {
+  font-family: "Monument Extended";
+  background-color: #1D1D1D;
+  text-align: right;
+  font-size: inherit;
+}
+
+input:focus {
+  border: 2px solid #c90e3b;
+  -webkit-appearance: none;
+}
+
+input:read-only {
+  color: inherit;
+  background-color: transparent;
+  -webkit-appearance: none;
+  border: 0;
+}
