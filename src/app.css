@@ -78,7 +78,7 @@ img {
 }
 
 body {
-  background-color: var(--accent-color);
+  background-color: #0a0a0a;
 }
 
 svg {
@@ -124,14 +124,13 @@ input[type="number"] {
 }
 
 input:focus {
-  border: 2px solid #c90e3b;
+  border: 2px solid var(--accent-color);
   -webkit-appearance: none;
 }
 
 input:read-only {
   color: inherit;
   background-color: transparent;
-  -webkit-appearance: none;
   border: 0;
 }
 
@@ -140,4 +139,22 @@ input:read-only {
     color: #000;
     background-color: #c5c5c5;
   }
+
+  body {
+    background-color: #fff;
+  }
+}
+
+.blink {
+  animation: blinker 2s ease infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+
+span {
+  display: contents;
 }

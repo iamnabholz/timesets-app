@@ -1,16 +1,23 @@
 <script>
-	import { timers, laps } from "../../stores/timers.js";
-	import Timer from "../Pomodoro/Timer.svelte";
-
 	import { slide } from "svelte/transition";
+	import { onDestroy } from "svelte";
+
+	import { timers, laps } from "../stores/timers.js";
+
+	import Timer from "./Timer.svelte";
+	import Lap from "./Lap.svelte";
 
 	export let pomodoroList;
+
+	onDestroy(() => {
+		$laps = [];
+	});
 </script>
 
 {#if pomodoroList}
 	{#if $timers.length > 0}
 		<div class="list-container" transition:slide>
-			<p>NEXT UP</p>
+			<p class="list-title">NEXT UP</p>
 
 			{#each $timers as timer (timer.id)}
 				<div transition:slide|local>
@@ -25,17 +32,11 @@
 	{/if}
 {:else if $laps.length > 0}
 	<div class="list-container" transition:slide>
-		<p>SAVED TIMES</p>
+		<p class="list-title">SAVED TIMES</p>
 
-		{#each $laps as lap}
-			<div class="laps" transition:slide|local>
-				<input
-					value={lap.name}
-					type="text"
-					maxlength="23"
-					placeholder="Lap name"
-				/>
-				<p>{lap.time}</p>
+		{#each $laps as lap (lap.id)}
+			<div transition:slide|local>
+				<Lap {...lap} />
 			</div>
 		{/each}
 	</div>
@@ -52,26 +53,13 @@
 		width: min(680px, 100%);
 	}
 
-	.laps {
-		border-top: 1px solid #292929;
-		padding: 1rem 0;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-
-	.laps p {
-		margin: 0;
-		font-size: 1.8rem;
-	}
-
 	.empty-list {
 		display: flex;
 		align-items: center;
-		height: 35vh;
+		margin-top: 10vh;
 	}
 
-	p {
+	.list-title {
 		color: inherit;
 		margin-bottom: 16px;
 	}

@@ -1,36 +1,43 @@
 <script>
-  import Controller from "./lib/components/Pomodoro/Controller.svelte";
-  import List from "./lib/components/Pomodoro/List.svelte";
+  import { theme } from "./lib/stores/settings.js";
+  import Pomodoro from "./lib/components/Pomodoro.svelte";
+  import Stopwatch from "./lib/components/Stopwatch.svelte";
+  import Settings from "./lib/components/Settings.svelte";
+
+  import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
 
-  import ControllerStopwatch from "./lib/components/Stopwatch/Controller.svelte";
-
   let currentView = "pomo";
-
-  const switchView = () => {
-    if (currentView === "pomo") {
-      currentView = "stop";
-    } else {
-      currentView = "pomo";
-    }
-  };
 </script>
 
-<!-- <div class="background-img" /> -->
-
-<main>
+<main style="--accent-color: {$theme}">
   <div class="section-container" style="z-index: 1;">
     <div class="top-section">
       <div class="section-header">
         <h1>TIMESETS</h1>
         <div class="action-controls-container">
-          <Button buttonFunction={switchView} selected={currentView === "pomo"}
+          <Button
+            buttonFunction={() => {
+              currentView = "pomo";
+            }}
+            selected={currentView === "pomo"}
             ><span slot="label">POMODORO</span></Button
           >
-          <Button buttonFunction={switchView} selected={currentView === "stop"}
+          <Button
+            buttonFunction={() => {
+              currentView = "stop";
+            }}
+            selected={currentView === "stop"}
             ><span slot="label">STOPWATCH</span></Button
           >
-          <Button withIcon noText>
+          <Button
+            buttonFunction={() => {
+              currentView = "settings";
+            }}
+            selected={currentView === "settings"}
+            withIcon
+            noText
+          >
             <span slot="icon"
               ><svg
                 width="24"
@@ -51,16 +58,20 @@
         </div>
       </div>
       {#if currentView === "pomo"}
-        <Controller />
+        <Pomodoro />
+      {:else if currentView === "stop"}
+        <Stopwatch />
       {:else}
-        <ControllerStopwatch />
+        <Settings />
       {/if}
     </div>
   </div>
 
-  <div class="section-container bottom-section" style="">
-    <List pomodoroList={currentView === "pomo"} />
-  </div>
+  {#if currentView !== "settings"}
+    <div class="section-container bottom-section">
+      <List pomodoroList={currentView === "pomo"} />
+    </div>
+  {/if}
 </main>
 
 <style>

@@ -1,8 +1,7 @@
 <script>
-	import { slide } from "svelte/transition";
-	import { timers, controller } from "../../stores/timers.js";
+	import { timers, controller } from "../stores/timers.js";
 
-	import Button from "../../Button.svelte";
+	import Button from "../Button.svelte";
 
 	export let id;
 	export let name;
@@ -12,7 +11,7 @@
 	let newName = name;
 	let newTime = time;
 
-	$: if ($controller === false) {
+	$: if (!$controller) {
 		completed = false;
 	}
 
@@ -135,6 +134,8 @@
 		padding: 1rem 0;
 		border-top: 1px solid #292929;
 		height: 80px;
+		column-gap: 12px;
+		max-width: 100%;
 	}
 
 	.left-side {
@@ -148,10 +149,6 @@
 		display: flex;
 		align-items: center;
 		column-gap: 12px;
-	}
-
-	input[type="text"] {
-		width: 90%;
 	}
 
 	.time-text {
@@ -171,5 +168,9 @@
 
 	input[type="text"]:read-only {
 		padding: 0.6rem 0;
+	}
+
+	input[type="text"] {
+		width: 100%;
 	}
 </style>

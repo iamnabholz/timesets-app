@@ -59,6 +59,13 @@
 		transition: 100ms ease;
 	}
 
+	@media only screen and (max-width: 600px) {
+		.button-container {
+			column-gap: 8px;
+			padding: 10px 14px;
+		}
+	}
+
 	.button-container:hover {
 		background-color: #000;
 		color: #fff;
@@ -82,20 +89,20 @@
 	}
 
 	.destructive {
-		color: var(--accent-color);
-		border-color: var(--accent-color);
+		color: #c90e3b;
+		border-color: #c90e3b;
 	}
 
 	.destructive:hover {
 		color: #fff;
-		border-color: var(--accent-color);
-		background-color: var(--accent-color);
+		border-color: #c90e3b;
+		background-color: #c90e3b;
 	}
 
 	.destructive:active {
 		background-color: #fff;
 		border-color: #fff;
-		color: var(--accent-color);
+		color: #c90e3b;
 	}
 
 	.smaller {

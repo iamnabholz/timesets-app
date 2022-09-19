@@ -1,16 +1,24 @@
 <script>
-	import Button from "../../Button.svelte";
+	import { onDestroy } from "svelte";
+	import { showNotification, playSound } from "../utils/notifications.js";
+	import Button from "../Button.svelte";
 
 	import Timer from "tiny-timer";
-	import { controller, laps } from "../../stores/timers.js";
+	import { timers, newEntry, controller } from "../stores/timers.js";
 
-	const timer = new Timer({ stopwatch: true });
+	const timer = new Timer();
 
 	let stopped = true;
 	let paused = false;
 	let buttonText = "Start";
 
+	let currentIndex = 0;
+
 	let currentTimerCount = "00:00";
+
+	onDestroy(() => {
+		$controller = false;
+	});
 
 	const startTimer = () => {
 		if (timer.status === "running") {
@@ -18,14 +26,17 @@
 		} else if (timer.status === "paused") {
 			timer.resume();
 		} else {
-			$laps = [];
-			timer.start(3600000, 1000);
+			timer.start($timers[currentIndex].time * 60000, 1000);
 		}
+
+		$controller = true;
 	};
 
 	const stopTimer = () => {
-		timer.stop();
+		currentIndex = 0;
+		$controller = false;
 		currentTimerCount = "00:00";
+		timer.stop();
 	};
 
 	timer.on("tick", (ms) => {
@@ -60,23 +71,31 @@
 		}
 	});
 
-	const newLap = () => {
-		const lap = {
-			name: "New lap",
-			time: currentTimerCount,
-		};
+	timer.on("done", () => {
+		let currentName = $timers[currentIndex].name;
+		showNotification(
+			"Timer " + currentName + " completed!",
+			"Now starting your next timer."
+		);
+		$timers[currentIndex].completed = true;
 
-		$laps = [lap].concat($laps);
+		if ($timers.length > currentIndex) {
+			currentIndex = currentIndex + 1;
+			startTimer();
+		} else {
+			currentIndex = 0;
+			console.log("Else lol");
+		}
 
-		console.log($laps);
-	};
+		console.log("Timer done");
+	});
 </script>
 
-<h1 class="timer-number">{currentTimerCount}</h1>
+<h1 class:blink={paused} class="timer-number">{currentTimerCount}</h1>
 
 <div class="action-controls-container">
 	<div class="main-controls">
-		<Button withIcon buttonFunction={startTimer}>
+		<Button withIcon buttonFunction={startTimer} disable={$timers.length === 0}>
 			<span slot="icon">
 				{#if stopped || paused}
 					<svg
@@ -124,7 +143,7 @@
 		{/if}
 	</div>
 
-	<Button withIcon disable={stopped} buttonFunction={newLap}>
+	<Button withIcon disable={!stopped} buttonFunction={newEntry}>
 		<span slot="icon">
 			<svg
 				width="22"
@@ -144,7 +163,7 @@
 				/>
 			</svg>
 		</span>
-		<span slot="label">Save time</span>
+		<span slot="label">Add timer</span>
 	</Button>
 </div>
 

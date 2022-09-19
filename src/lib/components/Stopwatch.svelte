@@ -1,18 +1,29 @@
 <script>
-	import Button from "../../Button.svelte";
+	import { onDestroy } from "svelte";
 
 	import Timer from "tiny-timer";
-	import { timers, newEntry, controller } from "../../stores/timers.js";
+	import { laps } from "../stores/timers.js";
+	import { showHour } from "../stores/settings.js";
 
-	const timer = new Timer();
+	import Button from "../Button.svelte";
+
+	const timer = new Timer({ stopwatch: true });
+
+	onDestroy(() => {
+		$laps = [];
+	});
+
+	let currentDelay = 0;
 
 	let stopped = true;
 	let paused = false;
 	let buttonText = "Start";
 
-	let currentIndex = 0;
+	let defaultTime = $showHour ? "0:00:00" : "00:00";
 
-	let currentTimerCount = "00:00";
+	let timerCountInMs = 0;
+	let currentTimerCount = defaultTime;
+	let currentLapCount = defaultTime;
 
 	const startTimer = () => {
 		if (timer.status === "running") {
@@ -20,30 +31,47 @@
 		} else if (timer.status === "paused") {
 			timer.resume();
 		} else {
-			timer.start($timers[currentIndex].time * 60000, 1000);
+			timer.start(36000000, 1000);
 		}
 	};
 
 	const stopTimer = () => {
-		currentIndex = 0;
 		timer.stop();
-		currentTimerCount = "00:00";
+		$laps = [];
+		currentTimerCount = defaultTime;
+		currentLapCount = defaultTime;
 	};
 
 	timer.on("tick", (ms) => {
+		timerCountInMs = ms;
 		currentTimerCount = timeAdapter(ms);
+		currentLapCount = timeAdapter(ms - currentDelay);
+		console.log(currentDelay);
 	});
 
 	function timeAdapter(ms) {
+		let hours = Math.floor(ms / 3600000);
 		let minutes = Math.floor(ms / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
-		return (
-			(minutes < 10 ? "0" : "") +
-			minutes +
-			":" +
-			(parseInt(seconds) < 10 ? "0" : "") +
-			seconds
-		);
+		if ($showHour) {
+			return (
+				hours +
+				":" +
+				(minutes < 10 ? "0" : "") +
+				minutes +
+				":" +
+				(parseInt(seconds) < 10 ? "0" : "") +
+				seconds
+			);
+		} else {
+			return (
+				(minutes < 10 ? "0" : "") +
+				minutes +
+				":" +
+				(parseInt(seconds) < 10 ? "0" : "") +
+				seconds
+			);
+		}
 	}
 
 	timer.on("statusChanged", (status) => {
@@ -51,38 +79,60 @@
 			buttonText = "Start";
 			paused = false;
 			stopped = true;
-			$controller = false;
 		} else if (status === "running") {
 			buttonText = "Pause";
 			paused = false;
 			stopped = false;
-			$controller = true;
 		} else {
 			buttonText = "Resume";
 			paused = true;
 			stopped = false;
-			$controller = true;
 		}
 	});
 
-	timer.on("done", () => {
-		if ($timers.length < currentIndex) {
-			$timers[currentIndex].completed = true;
-			currentIndex = currentIndex + 1;
-			startTimer();
-		} else {
-			currentIndex = 0;
-		}
+	const newLap = () => {
+		currentDelay = timerCountInMs;
 
-		console.log("Timer done");
-	});
+		const lap = {
+			id: Date.now(),
+			name: "New lap",
+			time: currentTimerCount,
+			lapTime: currentLapCount,
+		};
+
+		$laps = [lap].concat($laps);
+	};
 </script>
 
-<h1 class="timer-number">{currentTimerCount}</h1>
+<div class="stopwatch-timers">
+	<div class="timer">
+		<p>Total</p>
+
+		<h1
+			class:smaller-time={$showHour}
+			class:blink={paused}
+			class="timer-number"
+		>
+			{currentTimerCount}
+		</h1>
+	</div>
+
+	<div class="timer">
+		<p>Lap</p>
+
+		<h1
+			class:smaller-time={$showHour}
+			class:blink={paused}
+			class="timer-number"
+		>
+			{currentLapCount}
+		</h1>
+	</div>
+</div>
 
 <div class="action-controls-container">
 	<div class="main-controls">
-		<Button withIcon buttonFunction={startTimer} disable={$timers.length === 0}>
+		<Button withIcon buttonFunction={startTimer}>
 			<span slot="icon">
 				{#if stopped || paused}
 					<svg
@@ -130,7 +180,7 @@
 		{/if}
 	</div>
 
-	<Button withIcon disable={!stopped} buttonFunction={newEntry}>
+	<Button withIcon disable={stopped} buttonFunction={newLap}>
 		<span slot="icon">
 			<svg
 				width="22"
@@ -150,19 +200,30 @@
 				/>
 			</svg>
 		</span>
-		<span slot="label">Add timer</span>
+		<span slot="label">Lap</span>
 	</Button>
 </div>
 
 <style>
+	.stopwatch-timers {
+		margin: 1rem 0;
+	}
+
 	.timer-number {
 		font-family: "Monument Extended";
-		font-size: clamp(5rem, 20vw + 1rem, 10rem);
+		font-size: clamp(3rem, 20vw + 1rem, 6rem);
 		line-height: 1;
-		margin: 1rem 0 0.5rem 0;
-		align-self: center;
-		text-align: center;
-		width: 100%;
+	}
+
+	.timer {
+		display: flex;
+		justify-content: space-between;
+		text-align: right;
+	}
+
+	.timer p {
+		font-size: 1.2rem;
+		margin-top: 1rem;
 	}
 
 	.action-controls-container {
@@ -174,5 +235,24 @@
 	.main-controls {
 		display: flex;
 		column-gap: 4px;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.timer {
+			flex-direction: column;
+			row-gap: 12px;
+		}
+
+		.timer-number {
+			align-self: center;
+		}
+
+		.timer p {
+			align-self: flex-start;
+		}
+
+		.smaller-time {
+			font-size: 4.2rem;
+		}
 	}
 </style>
