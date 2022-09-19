@@ -34,7 +34,7 @@
 	<div class="list-container" transition:slide>
 		<p class="list-title">SAVED TIMES</p>
 
-		{#each $laps as lap (lap.id)}
+		{#each $laps as lap, i}
 			<div transition:slide|local>
 				<Lap {...lap} />
 			</div>

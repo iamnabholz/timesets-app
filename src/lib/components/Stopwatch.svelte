@@ -46,14 +46,13 @@
 		timerCountInMs = ms;
 		currentTimerCount = timeAdapter(ms);
 		currentLapCount = timeAdapter(ms - currentDelay);
-		console.log(currentDelay);
 	});
 
 	function timeAdapter(ms) {
 		let hours = Math.floor(ms / 3600000);
 		let minutes = Math.floor(ms / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
-		if ($showHour) {
+		if ($showHour || hours > 0) {
 			return (
 				hours +
 				":" +
@@ -95,7 +94,7 @@
 
 		const lap = {
 			id: Date.now(),
-			name: "New lap",
+			index: $laps.length,
 			time: currentTimerCount,
 			lapTime: currentLapCount,
 		};

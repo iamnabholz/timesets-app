@@ -4,7 +4,7 @@
   import Button from "../Button.svelte";
 
   export let id;
-  export let name;
+  export let index;
   export let time;
   export let lapTime;
 
@@ -15,7 +15,7 @@
 
 <div class="laps">
   <div class="left-side">
-    <p class="index">1</p>
+    <p class="index">{index + 1}</p>
     <p>Lap <br /> <span class="time">{lapTime}</span></p>
     <p>Total <br /> <span class="time">{time}</span></p>
     <!-- <input value={name} type="text" maxlength="23" placeholder="Lap name" /> -->
@@ -91,9 +91,5 @@
     display: flex;
     align-items: center;
     column-gap: 12px;
-  }
-
-  input[type="text"] {
-    width: 100%;
   }
 </style>

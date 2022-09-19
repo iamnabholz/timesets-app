@@ -11,36 +11,12 @@
     localStorage.setItem("theme", color);
   };
 
-  function isDenied() {
-    return (
-      Notification.permission === "denied" ||
-      Notification.permission === "default"
-    );
-  }
-
   let notificationsEnabled =
     JSON.parse(localStorage.getItem("notifications")) || false;
 
-  const changeNotificationSettings = () => {
-    if (isDenied()) {
-      Notification.requestPermission().then(function (permission) {
-        // If the user accepts, let's create a notification
-        if (permission === "granted") {
-          localStorage.setItem("notifications", "true");
-          showNotification();
-        } else {
-          notificationsEnabled = false;
-        }
-      });
-    } else {
-      if (!notificationsEnabled) {
-        localStorage.setItem("notifications", "true");
-        console.log("somethign");
-      } else {
-        localStorage.setItem("notifications", "false");
-        showNotification();
-      }
-    }
+  const changeNotifications = (value) => {
+    notificationsEnabled = value;
+    localStorage.setItem("notifications", value);
   };
 </script>
 
@@ -75,15 +51,25 @@
   </div>
 </div>
 
-<div class="settings-container">
-  <h1>Alerts</h1>
+{#if "Notification" in window}
+  <div class="settings-container">
+    <h1>Alerts</h1>
 
-  <div class="setting">
-    <h2>Enable notifications:</h2>
+    <div class="setting">
+      <h2>Enable notifications:</h2>
 
-    <Switch switchOn={changeNotificationSettings} />
+      <Switch
+        isOn={notificationsEnabled}
+        switchOn={() => {
+          changeNotifications(true);
+        }}
+        switchOff={() => {
+          changeNotifications(false);
+        }}
+      />
+    </div>
   </div>
-</div>
+{/if}
 
 <div class="settings-container">
   <h1>Pomodoro</h1>
@@ -116,11 +102,11 @@
       isOn={$showHour}
       switchOn={() => {
         $showHour = true;
-        localStorage.setItem("showHour", true);
+        localStorage.setItem("showHour", "true");
       }}
       switchOff={() => {
         $showHour = false;
-        localStorage.setItem("showHour", false);
+        localStorage.setItem("showHour", "false");
       }}
     />
   </div>
