@@ -4,14 +4,16 @@
   font-family: 'Monument Extended';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/MonumentExtended-Regular low.woff2') format('woff2');
+  src: url('fonts/MonumentExtended-Regular.woff2') format('woff2'),
+    url('fonts/MonumentExtended-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Syne';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/Syne-Medium.woff2') format('woff2');
+  src: url('fonts/Syne-Medium.woff2') format('woff2'),
+    url('fonts/Syne-Medium.woff') format('woff');
 }
 
 :root {
