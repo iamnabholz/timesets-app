@@ -66,3 +66,6 @@ export const timers = timerStore();
 
 
 export const controller = writable(false);
+
+
+export const laps = writable([]);

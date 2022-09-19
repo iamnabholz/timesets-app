@@ -76,7 +76,7 @@ img {
 }
 
 body {
-  background-color: #0a0a0a;
+  background-color: var(--accent-color);
 }
 
 svg {
@@ -100,6 +100,7 @@ input[type=number] {
 }
 
 input {
+  color: #fff;
   background-color: #1D1D1D;
   padding: 0;
   text-decoration: none;
@@ -109,9 +110,13 @@ input {
   height: 42px;
 }
 
+input[type="text"] {
+  padding: 0.6rem 0.4rem;
+  border-radius: 2px;
+}
+
 input[type="number"] {
   font-family: "Monument Extended";
-  background-color: #1D1D1D;
   text-align: right;
   font-size: inherit;
 }
@@ -126,4 +131,11 @@ input:read-only {
   background-color: transparent;
   -webkit-appearance: none;
   border: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  input {
+    color: #000;
+    background-color: #c5c5c5;
+  }
 }

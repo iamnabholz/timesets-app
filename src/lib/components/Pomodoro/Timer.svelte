@@ -1,6 +1,9 @@
 <script>
-	import Button from "../../Button.svelte";
+	import { slide } from "svelte/transition";
 	import { timers, controller } from "../../stores/timers.js";
+
+	import Button from "../../Button.svelte";
+
 	export let id;
 	export let name;
 	export let time;
@@ -56,23 +59,25 @@
 </script>
 
 <div class="timer-container">
-	{#if completed}
-		<p>COMPLETED</p>
-	{/if}
-
-	<span class="title-text">
-		<input
-			bind:value={newName}
-			on:blur={updateTimer}
-			on:submit={updateTimer}
-			readonly={$controller}
-			type="text"
-			maxlength="23"
-			placeholder="Timer name"
-		/>
-	</span>
-
 	<div class="left-side">
+		{#if completed === true}
+			<p>COMPLETED</p>
+		{/if}
+
+		<span class="title-text">
+			<input
+				bind:value={newName}
+				on:blur={updateTimer}
+				on:submit={updateTimer}
+				readonly={$controller}
+				type="text"
+				maxlength="23"
+				placeholder="Timer name"
+			/>
+		</span>
+	</div>
+
+	<div class="right-side">
 		<span class="time-text">
 			<input
 				bind:value={newTime}
@@ -129,20 +134,23 @@
 		justify-content: space-between;
 		padding: 1rem 0;
 		border-top: 1px solid #292929;
-		color: #fff;
 		height: 80px;
 	}
 
 	.left-side {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		column-gap: 12px;
+	}
+
+	.right-side {
 		display: flex;
 		align-items: center;
 		column-gap: 12px;
 	}
 
 	input[type="text"] {
-		color: inherit;
-		padding: 0.6rem 0.4rem;
-		border-radius: 2px;
 		width: 90%;
 	}
 
@@ -150,11 +158,10 @@
 		display: flex;
 		align-items: center;
 		font-family: "Monument Extended";
-		font-size: 1.4rem;
+		font-size: 1.2rem;
 	}
 
 	input[type="number"] {
-		color: #fff;
 		width: 3rem;
 	}
 

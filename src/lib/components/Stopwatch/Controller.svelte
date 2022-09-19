@@ -2,15 +2,13 @@
 	import Button from "../../Button.svelte";
 
 	import Timer from "tiny-timer";
-	import { timers, newEntry, controller } from "../../stores/timers.js";
+	import { controller, laps } from "../../stores/timers.js";
 
-	const timer = new Timer();
+	const timer = new Timer({ stopwatch: true });
 
 	let stopped = true;
 	let paused = false;
 	let buttonText = "Start";
-
-	let currentIndex = 0;
 
 	let currentTimerCount = "00:00";
 
@@ -20,12 +18,12 @@
 		} else if (timer.status === "paused") {
 			timer.resume();
 		} else {
-			timer.start($timers[currentIndex].time * 60000, 1000);
+			$laps = [];
+			timer.start(3600000, 1000);
 		}
 	};
 
 	const stopTimer = () => {
-		currentIndex = 0;
 		timer.stop();
 		currentTimerCount = "00:00";
 	};
@@ -51,38 +49,34 @@
 			buttonText = "Start";
 			paused = false;
 			stopped = true;
-			$controller = false;
 		} else if (status === "running") {
 			buttonText = "Pause";
 			paused = false;
 			stopped = false;
-			$controller = true;
 		} else {
 			buttonText = "Resume";
 			paused = true;
 			stopped = false;
-			$controller = true;
 		}
 	});
 
-	timer.on("done", () => {
-		if ($timers.length < currentIndex) {
-			$timers[currentIndex].completed = true;
-			currentIndex = currentIndex + 1;
-			startTimer();
-		} else {
-			currentIndex = 0;
-		}
+	const newLap = () => {
+		const lap = {
+			name: "New lap",
+			time: currentTimerCount,
+		};
 
-		console.log("Timer done");
-	});
+		$laps = [lap].concat($laps);
+
+		console.log($laps);
+	};
 </script>
 
 <h1 class="timer-number">{currentTimerCount}</h1>
 
 <div class="action-controls-container">
 	<div class="main-controls">
-		<Button withIcon buttonFunction={startTimer} disable={$timers.length === 0}>
+		<Button withIcon buttonFunction={startTimer}>
 			<span slot="icon">
 				{#if stopped || paused}
 					<svg
@@ -130,7 +124,7 @@
 		{/if}
 	</div>
 
-	<Button withIcon disable={!stopped} buttonFunction={newEntry}>
+	<Button withIcon disable={stopped} buttonFunction={newLap}>
 		<span slot="icon">
 			<svg
 				width="22"
@@ -150,7 +144,7 @@
 				/>
 			</svg>
 		</span>
-		<span slot="label">Add timer</span>
+		<span slot="label">Save time</span>
 	</Button>
 </div>
 
