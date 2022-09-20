@@ -2,7 +2,7 @@
 	import { onDestroy } from "svelte";
 
 	import Timer from "tiny-timer";
-	import { laps } from "../stores/timers.js";
+	import { stopwatchState, laps } from "../stores/timers.js";
 	import { showHour } from "../stores/settings.js";
 	import { playSound } from "../utils/notifications.js";
 
@@ -34,11 +34,14 @@
 		} else {
 			timer.start(36000000, 1000);
 		}
+
+		$stopwatchState = true;
 	};
 
 	const stopTimer = () => {
 		currentDelay = 0;
 		timer.stop();
+		$stopwatchState = false;
 		$laps = [];
 		currentTimerCount = defaultTime;
 		currentLapCount = defaultTime;
@@ -226,6 +229,19 @@
 	</title>
 </svelte:head>
 
+<svelte:window
+	on:beforeunload={(event) => {
+		if (!stopped) {
+			// Cancel the event as stated by the standard.
+			event.preventDefault();
+			// Chrome requires returnValue to be set.
+			event.returnValue = "";
+			// more compatibility
+			return "...";
+		}
+	}}
+/>
+
 <style>
 	.stopwatch-timers {
 		margin: 1rem 0;
@@ -245,7 +261,7 @@
 
 	.timer p {
 		font-size: 1.2rem;
-		margin-top: 1rem;
+		padding-top: 1rem;
 	}
 
 	.action-controls-container {
@@ -262,7 +278,6 @@
 	@media only screen and (max-width: 600px) {
 		.timer {
 			flex-direction: column;
-			row-gap: 12px;
 		}
 
 		.timer-number {
@@ -271,6 +286,8 @@
 
 		.timer p {
 			align-self: flex-start;
+			padding-top: 0;
+			padding-bottom: 0.4rem;
 		}
 
 		.smaller-time {

@@ -101,6 +101,12 @@
     column-gap: 28px;
   }
 
+  @media only screen and (max-width: 600px) {
+    .left-side {
+      column-gap: 14px;
+    }
+  }
+
   .right-side {
     display: flex;
     align-items: center;

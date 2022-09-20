@@ -1,5 +1,7 @@
 <script>
   import { theme, currentView } from "./lib/stores/settings.js";
+  import { pomodoroState, stopwatchState } from "./lib/stores/timers.js";
+
   import { fly } from "svelte/transition";
 
   import Pomodoro from "./lib/components/Pomodoro.svelte";
@@ -19,15 +21,31 @@
           <Button
             buttonTitle="Pomodoro mode"
             buttonFunction={() => {
-              $currentView = "pomo";
+              if ($pomodoroState) {
+                if (
+                  window.confirm("Currently running timers will be stopped")
+                ) {
+                  $currentView = "pomo";
+                }
+              } else {
+                $currentView = "pomo";
+              }
             }}
             selected={$currentView === "pomo"}
-            ><span slot="label">POMODORO</span></Button
-          >
+            ><span slot="label">POMODORO</span>
+          </Button>
           <Button
             buttonTitle="Stopwatch mode"
             buttonFunction={() => {
-              $currentView = "stop";
+              if ($pomodoroState) {
+                if (
+                  window.confirm("Currently running timers will be stopped")
+                ) {
+                  $currentView = "stop";
+                }
+              } else {
+                $currentView = "stop";
+              }
             }}
             selected={$currentView === "stop"}
             ><span slot="label">STOPWATCH</span></Button
@@ -35,7 +53,15 @@
           <Button
             buttonTitle="Settings"
             buttonFunction={() => {
-              $currentView = "settings";
+              if ($pomodoroState || $stopwatchState) {
+                if (
+                  window.confirm("Currently running timers will be stopped")
+                ) {
+                  $currentView = "settings";
+                }
+              } else {
+                $currentView = "settings";
+              }
             }}
             selected={$currentView === "settings"}
             withIcon

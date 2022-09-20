@@ -4,7 +4,7 @@
 	import Button from "../Button.svelte";
 
 	import Timer from "tiny-timer";
-	import { timers, newEntry, controller } from "../stores/timers.js";
+	import { timers, newEntry, pomodoroState } from "../stores/timers.js";
 
 	const timer = new Timer();
 
@@ -18,7 +18,7 @@
 	let currentTimerCount = "00:00";
 
 	onDestroy(() => {
-		$controller = false;
+		$pomodoroState = false;
 	});
 
 	const startTimer = () => {
@@ -33,12 +33,12 @@
 
 		done = false;
 
-		$controller = true;
+		$pomodoroState = true;
 	};
 
 	const stopTimer = () => {
 		currentIndex = 0;
-		$controller = false;
+		$pomodoroState = false;
 		currentTimerCount = "00:00";
 		timer.stop();
 		done = false;
@@ -155,7 +155,13 @@
 						<rect x="3" y="3" width="16" height="16" rx="2" />
 					</svg>
 				</span>
-				<span slot="label">Stop</span>
+				<span slot="label">
+					{#if !done}
+						Stop
+					{:else}
+						Complete
+					{/if}
+				</span>
 			</Button>
 		{/if}
 	</div>
@@ -191,11 +197,24 @@
 
 <svelte:head>
 	<title>
-		{$controller && !done
+		{$pomodoroState && !done
 			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
 			: "TIMESETS"}
 	</title>
 </svelte:head>
+
+<svelte:window
+	on:beforeunload={(event) => {
+		if (!stopped && !done) {
+			// Cancel the event as stated by the standard.
+			event.preventDefault();
+			// Chrome requires returnValue to be set.
+			event.returnValue = "";
+			// more compatibility
+			return "...";
+		}
+	}}
+/>
 
 <style>
 	.timer-number {

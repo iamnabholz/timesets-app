@@ -1,5 +1,5 @@
 <script>
-	import { timers, controller } from "../stores/timers.js";
+	import { timers, pomodoroState } from "../stores/timers.js";
 
 	import Button from "../Button.svelte";
 
@@ -11,7 +11,7 @@
 	let newName = name;
 	let newTime = time;
 
-	$: if ($controller === false) {
+	$: if ($pomodoroState === false) {
 		completed = false;
 		updateTimer();
 	}
@@ -69,7 +69,7 @@
 				bind:value={newName}
 				on:blur={updateTimer}
 				on:submit={updateTimer}
-				readonly={$controller}
+				readonly={$pomodoroState}
 				type="text"
 				maxlength="23"
 				placeholder="Timer name"
@@ -84,7 +84,7 @@
 				on:input={checkTime}
 				on:blur={updateTimer}
 				on:submit={updateTimer}
-				readonly={$controller}
+				readonly={$pomodoroState}
 				type="number"
 				maxlength="2"
 				max="60"
@@ -94,7 +94,7 @@
 			<p class="time-text">:00</p>
 		</span>
 
-		{#if !$controller}
+		{#if !$pomodoroState}
 			<Button
 				buttonTitle="Delete timer"
 				smaller

@@ -102,9 +102,9 @@ export const resetTimers = () => {
     }
 }
 
+export const pomodoroState = writable(false);
 
-export const controller = writable(false);
-
+export const stopwatchState = writable(false);
 
 function lapStore() {
     const state = [];
