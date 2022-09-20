@@ -60,13 +60,11 @@
           </Button>
         </div>
       </div>
-      <span transition:fly>
-        {#if $currentView === "pomo"}
-          <Pomodoro />
-        {:else if $currentView === "stop"}
-          <Stopwatch />
-        {/if}
-      </span>
+      {#if $currentView === "pomo"}
+        <Pomodoro />
+      {:else if $currentView === "stop"}
+        <Stopwatch />
+      {/if}
     </div>
   </div>
 

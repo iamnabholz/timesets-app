@@ -4,20 +4,20 @@
   font-family: 'Monument Extended';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/MonumentExtended-Regular.woff2') format('woff2'),
-    url('fonts/MonumentExtended-Regular.woff') format('woff');
+  src: url('/fonts/MonumentExtended-Regular.woff2') format('woff2'),
+    url('/fonts/MonumentExtended-Regular.woff') format('woff');
 }
 
 @font-face {
   font-family: 'Syne';
   font-style: normal;
-  font-weight: normal;
-  src: url('fonts/Syne-Medium.woff2') format('woff2'),
-    url('fonts/Syne-Medium.woff') format('woff');
+  font-weight: 500;
+  src: url('/fonts/Syne-Medium.woff2') format('woff2'),
+    url('/fonts/Syne-Medium.woff') format('woff');
 }
 
 :root {
-  --accent-color: #c90e3b;
+  --accent-color: #CB2A37;
   --grey-color: rgba(0, 0, 0, 0.2);
 }
 

@@ -58,7 +58,7 @@
 	};
 </script>
 
-<div class="timer-container">
+<div class:completed-timer={completed} class="timer-container">
 	<div class="left-side" class:completed>
 		{#if completed}
 			<p class="completed">COMPLETED</p>
@@ -159,6 +159,10 @@
 
 	.completed {
 		margin-bottom: -8px;
+	}
+
+	.completed-timer {
+		opacity: 0.5;
 	}
 
 	.time-text {

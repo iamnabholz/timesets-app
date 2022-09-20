@@ -18,8 +18,8 @@
     <div class="index">
       <p>{index + 1}</p>
     </div>
-    <p>Lap <br /> <span class="time">{lapTime}</span></p>
     <p>Total <br /> <span class="time">{time}</span></p>
+    <p>Lap <br /> <span class="time">{lapTime}</span></p>
   </div>
 
   <div class="right-side">
@@ -98,7 +98,7 @@
   .left-side {
     display: flex;
     align-items: center;
-    column-gap: 12px;
+    column-gap: 28px;
   }
 
   .right-side {

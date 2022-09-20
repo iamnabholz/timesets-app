@@ -96,7 +96,10 @@ function timerStore() {
 export const timers = timerStore();
 
 export const resetTimers = () => {
-    timers.reset();
+    if(window.confirm("Do you really want to reset your timers?"))
+    {
+        timers.reset();
+    }
 }
 
 

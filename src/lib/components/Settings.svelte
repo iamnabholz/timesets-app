@@ -44,25 +44,31 @@
       <Button
         buttonTitle="Green theme"
         buttonFunction={() => {
-          changeTheme("#6bc80f");
-        }}><span slot="label">Green</span></Button
+          changeTheme("#E5A441");
+        }}><span slot="label">Yellow</span></Button
       >
       <Button
         buttonTitle="Purple theme"
         buttonFunction={() => {
-          changeTheme("#5a0fc8");
-        }}><span slot="label">Purple</span></Button
+          changeTheme("#A161E2");
+        }}><span slot="label">Violet</span></Button
+      >
+      <Button
+        buttonTitle="Purple theme"
+        buttonFunction={() => {
+          changeTheme("#69A98B");
+        }}><span slot="label">Green</span></Button
       >
       <Button
         buttonTitle="Red theme"
         buttonFunction={() => {
-          changeTheme("#c90e3b");
+          changeTheme("#CB2A37");
         }}><span slot="label">Red</span></Button
       >
       <Button
         buttonTitle="Blue theme"
         buttonFunction={() => {
-          changeTheme("#0f2cc8");
+          changeTheme("#137195");
         }}><span slot="label">Blue</span></Button
       >
     </div>

@@ -100,6 +100,8 @@
 			lapTime: currentLapCount,
 		};
 
+		currentLapCount = defaultTime;
+
 		$laps = [lap].concat($laps);
 	};
 </script>
