@@ -1,16 +1,16 @@
 'use strict';
 
 // Update cache names any time any of the cached files change.
-const CACHE_NAME = 'timesets-cache-002';
+const CACHE_NAME = 'timesets-cache-003';
 
 // Add list of files to cache here.
 const FILES_TO_CACHE = [
   '/',
   '/assets',
   '/fonts',
+  '/icons',
   '/completed.wav',
-  '/index.html',
-  '/service-worker.js'
+  '/index.html'
 ];
 
 self.addEventListener('install', (evt) => {
