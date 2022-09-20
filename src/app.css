@@ -43,6 +43,7 @@ h4,
 h5,
 h6,
 p,
+a,
 blockquote,
 pre {
   font-family: 'Syne';
@@ -88,6 +89,20 @@ svg {
 
 button {
   -webkit-appearance: none;
+}
+
+a {
+  color: initial;
+  transition: all 150ms ease;
+}
+
+a:visited {
+  color: initial;
+}
+
+a:hover {
+  transform: translate(-2px, -2px);
+  color: #fff;
 }
 
 /* Chrome, Safari, Edge, Opera */

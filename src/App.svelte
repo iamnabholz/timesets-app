@@ -79,6 +79,10 @@
   </div>
 </main>
 
+<svelte:head>
+  <meta name="theme-color" content={$theme} />
+</svelte:head>
+
 <style>
   main {
     display: flex;

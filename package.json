@@ -1,7 +1,7 @@
 {
-  "name": "timesets-new",
+  "name": "timesets",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.20.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",

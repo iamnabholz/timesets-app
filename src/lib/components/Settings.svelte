@@ -6,6 +6,16 @@
   import Button from "../Button.svelte";
   import Switch from "../Toggle.svelte";
 
+  const themeOptions = {
+    Green: "#69A98B",
+    Yellow: "#E5A441",
+    Red: "#CB2A37",
+    Violet: "#A161E2",
+    Blue: "#137195",
+  };
+
+  $: currentTheme = $theme;
+
   const changeTheme = (color) => {
     $theme = color;
     localStorage.setItem("theme", color);
@@ -34,137 +44,143 @@
   };
 </script>
 
-<div class="settings-container">
-  <h1>Settings</h1>
+<div class="settings-column">
+  <div class="settings-container">
+    <div>
+      <h1>Settings</h1>
 
-  <div class="setting">
-    <h2>Theme:</h2>
+      <div class="setting">
+        <p>Timesets v1.20</p>
+        <a rel="noreferrer" target="_blank" href="https://nabholz.work/"
+          >nabholz.work &#8599;
+        </a>
+      </div>
+    </div>
 
-    <div class="theme-options">
-      <Button
-        buttonTitle="Green theme"
-        buttonFunction={() => {
-          changeTheme("#E5A441");
-        }}><span slot="label">Yellow</span></Button
+    <div class="setting separator">
+      <h2>Theme:</h2>
+
+      <div class="theme-options">
+        {#each Object.entries(themeOptions) as [name, color]}
+          <Button
+            selected={currentTheme === color}
+            buttonTitle={name + " theme"}
+            buttonFunction={() => {
+              changeTheme(color);
+            }}><span slot="label">{name}</span></Button
+          >
+        {/each}
+      </div>
+    </div>
+
+    <div class="setting separator">
+      <h2>Default view:</h2>
+
+      <Switch
+        isOn={view === "pomo"}
+        switchOn={() => {
+          view = "pomo";
+          localStorage.setItem("view", "pomo");
+        }}
+        switchOff={() => {
+          view = "stop";
+          localStorage.setItem("view", "stop");
+        }}
       >
+        <span slot="labelYes">Pomodoro</span>
+        <span slot="labelNo">Stopwatch</span>
+      </Switch>
+    </div>
+  </div>
+
+  {#if "Notification" in window}
+    <div class="settings-container">
+      <h1>Alerts</h1>
+
+      <div class="setting separator">
+        <h2>Enable notifications:</h2>
+
+        <Switch
+          isOn={notificationsEnabled}
+          switchOn={() => {
+            toggleNotifications(true);
+          }}
+          switchOff={() => {
+            toggleNotifications(false);
+          }}
+        />
+      </div>
+    </div>
+  {/if}
+
+  <div class="settings-container">
+    <h1>Pomodoro</h1>
+
+    <div class="setting separator">
+      <h2>Play sound when completed:</h2>
+
+      <Switch
+        isOn={soundEnabled}
+        switchOn={() => {
+          toggleSound(true);
+        }}
+        switchOff={() => {
+          toggleSound(false);
+        }}
+      />
+    </div>
+    <div class="setting separator">
+      <h2>Reset timers:</h2>
+
       <Button
-        buttonTitle="Purple theme"
-        buttonFunction={() => {
-          changeTheme("#A161E2");
-        }}><span slot="label">Violet</span></Button
-      >
-      <Button
-        buttonTitle="Purple theme"
-        buttonFunction={() => {
-          changeTheme("#69A98B");
-        }}><span slot="label">Green</span></Button
-      >
-      <Button
-        buttonTitle="Red theme"
-        buttonFunction={() => {
-          changeTheme("#CB2A37");
-        }}><span slot="label">Red</span></Button
-      >
-      <Button
-        buttonTitle="Blue theme"
-        buttonFunction={() => {
-          changeTheme("#137195");
-        }}><span slot="label">Blue</span></Button
+        buttonTitle="Reset Pomodoro timers to default"
+        buttonFunction={resetTimers}><span slot="label">Reset</span></Button
       >
     </div>
   </div>
 
-  <div class="setting">
-    <h2>Default view:</h2>
-
-    <Switch
-      isOn={view === "pomo"}
-      switchOn={() => {
-        view = "pomo";
-        localStorage.setItem("view", "pomo");
-      }}
-      switchOff={() => {
-        view = "stop";
-        localStorage.setItem("view", "stop");
-      }}
-    >
-      <span slot="labelYes">Pomodoro</span>
-      <span slot="labelNo">Stopwatch</span>
-    </Switch>
-  </div>
-</div>
-
-{#if "Notification" in window}
   <div class="settings-container">
-    <h1>Alerts</h1>
+    <h1>Stopwatch</h1>
 
-    <div class="setting">
-      <h2>Enable notifications:</h2>
+    <div class="setting separator">
+      <h2>Always show hours:</h2>
 
       <Switch
-        isOn={notificationsEnabled}
+        isOn={$showHour}
         switchOn={() => {
-          toggleNotifications(true);
+          $showHour = true;
+          localStorage.setItem("showHour", "true");
         }}
         switchOff={() => {
-          toggleNotifications(false);
+          $showHour = false;
+          localStorage.setItem("showHour", "false");
         }}
       />
     </div>
   </div>
-{/if}
-
-<div class="settings-container">
-  <h1>Pomodoro</h1>
-
-  <div class="setting">
-    <h2>Play sound when completed:</h2>
-
-    <Switch
-      isOn={soundEnabled}
-      switchOn={() => {
-        toggleSound(true);
-      }}
-      switchOff={() => {
-        toggleSound(false);
-      }}
-    />
-  </div>
-  <div class="setting">
-    <h2>Reset timers:</h2>
-
-    <Button
-      buttonTitle="Reset Pomodoro timers to default"
-      buttonFunction={resetTimers}><span slot="label">Reset</span></Button
-    >
-  </div>
-</div>
-
-<div class="settings-container">
-  <h1>Stopwatch</h1>
-
-  <div class="setting">
-    <h2>Always show hours:</h2>
-
-    <Switch
-      isOn={$showHour}
-      switchOn={() => {
-        $showHour = true;
-        localStorage.setItem("showHour", "true");
-      }}
-      switchOff={() => {
-        $showHour = false;
-        localStorage.setItem("showHour", "false");
-      }}
-    />
-  </div>
 </div>
 
 <style>
+  .settings-column {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+  }
+
   .settings-container {
     display: flex;
     flex-direction: column;
-    padding-top: 1rem;
+  }
+
+  .separator {
+    border-top: 1px solid var(--grey-color);
+  }
+
+  .setting {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
   }
 
   .theme-options {
@@ -176,7 +192,7 @@
 
   h1 {
     color: #000;
-    padding: 1rem 0;
+    padding-bottom: 0.8rem;
     font-size: 2rem;
   }
 
@@ -185,11 +201,7 @@
     font-size: 1.4rem;
   }
 
-  .setting {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-top: 1px solid var(--grey-color);
-    padding: 1rem 0;
+  p {
+    color: #000;
   }
 </style>
