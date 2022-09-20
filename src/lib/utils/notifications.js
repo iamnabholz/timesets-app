@@ -1,10 +1,22 @@
-const sound = '/completed.wav';
+const done = '/sounds/timer-done.wav';
+const lap = '/sounds/new-lap.wav';
 
-export function playSound() {
-  const audio = new Audio(sound);
+export function playSound(soundToPlay) {
 
-  if(JSON.parse(localStorage.getItem("sound")) === true){
-    audio.play();
+  if(soundToPlay === "done")
+  {
+    const audio = new Audio(done);
+  
+    if(JSON.parse(localStorage.getItem("timerSound")) === true){
+      audio.play();
+    }
+  } else if(soundToPlay === "lap") 
+  {
+    const audio = new Audio(lap);
+    
+    if(JSON.parse(localStorage.getItem("lapSound")) === true){
+      audio.play();
+    }
   }
 }
 
@@ -21,7 +33,7 @@ function show(title, body) {
     var notification = new Notification(
         title || "Notifications have been enabled", {
             body: body || "Now you will be notified when a timer has finished",
-            icon: "/android-chrome-512x512.png",
+            icon: "/icons/icon-512.png",
             silent: true
         }
     );

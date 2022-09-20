@@ -78,11 +78,7 @@
 
 	timer.on("done", () => {
 		let currentName = $timers[currentIndex].name;
-		showNotification(
-			"Timer " + currentName + " completed!",
-			"Now starting your next timer."
-		);
-		playSound();
+		playSound("done");
 
 		$timers[currentIndex].completed = true;
 
@@ -90,10 +86,17 @@
 
 		if (currentIndex < $timers.length) {
 			startTimer();
+			showNotification(
+				"'" + currentName + "' completed!",
+				"Your next timer has started now."
+			);
 		} else {
 			currentIndex = 0;
 			done = true;
-			console.log(stopped + " " + paused);
+			showNotification(
+				"'" + currentName + "' completed!",
+				"You have completed all of your timers."
+			);
 		}
 
 		//console.log("Timer done");
@@ -188,7 +191,7 @@
 
 <svelte:head>
 	<title>
-		{$controller
+		{$controller && !done
 			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
 			: "TIMESETS"}
 	</title>

@@ -1,7 +1,7 @@
 'use strict';
 
 // Update cache names any time any of the cached files change.
-const CACHE_NAME = 'timesets-cache-005';
+const CACHE_NAME = 'timesets-cache-007';
 
 // Add list of files to cache here.
 const FILES_TO_CACHE = [
@@ -15,8 +15,9 @@ const FILES_TO_CACHE = [
   '/icons/icon-180.png',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
+  '/sounds/new-lap.wav',
+  '/sounds/timer-done.wav',
   '/favicon.ico',
-  '/completed.wav',
   '/index.html'
 ];
 

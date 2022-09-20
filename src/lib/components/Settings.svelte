@@ -1,5 +1,5 @@
 <script>
-  import { theme, showHour, currentView } from "../stores/settings.js";
+  import { theme, showHour } from "../stores/settings.js";
   import { resetTimers } from "../stores/timers.js";
   import { showNotification, playSound } from "../utils/notifications.js";
 
@@ -23,12 +23,20 @@
 
   let view = localStorage.getItem("view") || "pomo";
 
-  let soundEnabled = JSON.parse(localStorage.getItem("sound")) || true;
+  let timerSound = JSON.parse(localStorage.getItem("timerSound")) || true;
 
-  const toggleSound = (value) => {
-    localStorage.setItem("sound", value);
-    soundEnabled = value;
-    playSound();
+  const toggleTimerSound = (value) => {
+    localStorage.setItem("timerSound", value);
+    timerSound = value;
+    playSound("done");
+  };
+
+  let lapSound = JSON.parse(localStorage.getItem("lapSound")) || true;
+
+  const toggleLapSound = (value) => {
+    localStorage.setItem("lapSound", value);
+    lapSound = value;
+    playSound("lap");
   };
 
   let notificationsEnabled =
@@ -120,12 +128,12 @@
       <h2>Play sound when completed:</h2>
 
       <Switch
-        isOn={soundEnabled}
+        isOn={timerSound}
         switchOn={() => {
-          toggleSound(true);
+          toggleTimerSound(true);
         }}
         switchOff={() => {
-          toggleSound(false);
+          toggleTimerSound(false);
         }}
       />
     </div>
@@ -141,6 +149,20 @@
 
   <div class="settings-container">
     <h1>Stopwatch</h1>
+
+    <div class="setting separator">
+      <h2>Play sound on new laps:</h2>
+
+      <Switch
+        isOn={lapSound}
+        switchOn={() => {
+          toggleLapSound(true);
+        }}
+        switchOff={() => {
+          toggleLapSound(false);
+        }}
+      />
+    </div>
 
     <div class="setting separator">
       <h2>Always show hours:</h2>
@@ -159,6 +181,10 @@
     </div>
   </div>
 </div>
+
+<svelte:head>
+  <title>TIMESETS</title>
+</svelte:head>
 
 <style>
   .settings-column {

@@ -4,6 +4,7 @@
 	import Timer from "tiny-timer";
 	import { laps } from "../stores/timers.js";
 	import { showHour } from "../stores/settings.js";
+	import { playSound } from "../utils/notifications.js";
 
 	import Button from "../Button.svelte";
 
@@ -91,6 +92,8 @@
 	});
 
 	const newLap = () => {
+		playSound("lap");
+
 		currentDelay = timerCountInMs;
 
 		const lap = {
