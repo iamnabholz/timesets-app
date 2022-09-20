@@ -10,6 +10,7 @@ const FILES_TO_CACHE = [
   '/fonts',
   '/icons',
   '/completed.wav',
+  '/icon.ico',
   '/index.html'
 ];
 
