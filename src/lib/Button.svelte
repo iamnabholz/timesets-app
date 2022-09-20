@@ -1,4 +1,5 @@
 <script>
+	export let buttonTitle = "Button";
 	export let withIcon = false;
 	export let noText = false;
 
@@ -14,6 +15,7 @@
 </script>
 
 <button
+	title={buttonTitle}
 	class:selected
 	class:destructive
 	class:smaller

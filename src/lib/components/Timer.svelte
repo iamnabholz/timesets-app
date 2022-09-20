@@ -11,8 +11,9 @@
 	let newName = name;
 	let newTime = time;
 
-	$: if (!$controller) {
+	$: if ($controller === false) {
 		completed = false;
+		updateTimer();
 	}
 
 	const deleteTimer = () => {
@@ -58,9 +59,9 @@
 </script>
 
 <div class="timer-container">
-	<div class="left-side">
-		{#if completed === true}
-			<p>COMPLETED</p>
+	<div class="left-side" class:completed>
+		{#if completed}
+			<p class="completed">COMPLETED</p>
 		{/if}
 
 		<span class="title-text">
@@ -94,7 +95,14 @@
 		</span>
 
 		{#if !$controller}
-			<Button smaller destructive withIcon noText buttonFunction={deleteTimer}>
+			<Button
+				buttonTitle="Delete timer"
+				smaller
+				destructive
+				withIcon
+				noText
+				buttonFunction={deleteTimer}
+			>
 				<span slot="icon">
 					<svg
 						width="22"
@@ -141,14 +149,16 @@
 	.left-side {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
-		column-gap: 12px;
 	}
 
 	.right-side {
 		display: flex;
 		align-items: center;
 		column-gap: 12px;
+	}
+
+	.completed {
+		margin-bottom: -8px;
 	}
 
 	.time-text {

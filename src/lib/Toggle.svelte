@@ -13,11 +13,11 @@
 </script>
 
 <div class="toggle-container">
-  <Button selected={isOn} buttonFunction={switchOn}
-    ><span slot="label">Yes</span></Button
+  <Button buttonTitle="Yes" selected={isOn} buttonFunction={switchOn}
+    ><span slot="label"><slot name="labelYes">Yes</slot></span></Button
   >
-  <Button selected={!isOn} buttonFunction={switchOff}
-    ><span slot="label">No</span></Button
+  <Button buttonTitle="No" selected={!isOn} buttonFunction={switchOff}
+    ><span slot="label"><slot name="labelNo">No</slot></span></Button
   >
 </div>
 

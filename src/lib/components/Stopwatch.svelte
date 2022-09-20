@@ -36,6 +36,7 @@
 	};
 
 	const stopTimer = () => {
+		currentDelay = 0;
 		timer.stop();
 		$laps = [];
 		currentTimerCount = defaultTime;
@@ -131,7 +132,11 @@
 
 <div class="action-controls-container">
 	<div class="main-controls">
-		<Button withIcon buttonFunction={startTimer}>
+		<Button
+			buttonTitle="Start/pause stopwatch"
+			withIcon
+			buttonFunction={startTimer}
+		>
 			<span slot="icon">
 				{#if stopped || paused}
 					<svg
@@ -162,7 +167,7 @@
 		</Button>
 
 		{#if !stopped}
-			<Button withIcon buttonFunction={stopTimer}>
+			<Button buttonTitle="Stop stopwatch" withIcon buttonFunction={stopTimer}>
 				<span slot="icon">
 					<svg
 						width="22"
@@ -179,7 +184,12 @@
 		{/if}
 	</div>
 
-	<Button withIcon disable={stopped} buttonFunction={newLap}>
+	<Button
+		buttonTitle="Save new lap"
+		withIcon
+		disable={stopped}
+		buttonFunction={newLap}
+	>
 		<span slot="icon">
 			<svg
 				width="22"
@@ -202,6 +212,14 @@
 		<span slot="label">Lap</span>
 	</Button>
 </div>
+
+<svelte:head>
+	<title>
+		{!stopped
+			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
+			: "TIMESETS"}
+	</title>
+</svelte:head>
 
 <style>
 	.stopwatch-timers {

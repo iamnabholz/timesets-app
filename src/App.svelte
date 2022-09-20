@@ -1,40 +1,43 @@
 <script>
-  import { theme } from "./lib/stores/settings.js";
+  import { theme, currentView } from "./lib/stores/settings.js";
+  import { fly } from "svelte/transition";
+
   import Pomodoro from "./lib/components/Pomodoro.svelte";
   import Stopwatch from "./lib/components/Stopwatch.svelte";
   import Settings from "./lib/components/Settings.svelte";
 
   import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
-
-  let currentView = "pomo";
 </script>
 
 <main style="--accent-color: {$theme}">
-  <div class="section-container" style="z-index: 1;">
-    <div class="top-section">
+  <div class="top-section" style="z-index: 1;">
+    <div class="section-container">
       <div class="section-header">
         <h1>TIMESETS</h1>
         <div class="action-controls-container">
           <Button
+            buttonTitle="Pomodoro mode"
             buttonFunction={() => {
-              currentView = "pomo";
+              $currentView = "pomo";
             }}
-            selected={currentView === "pomo"}
+            selected={$currentView === "pomo"}
             ><span slot="label">POMODORO</span></Button
           >
           <Button
+            buttonTitle="Stopwatch mode"
             buttonFunction={() => {
-              currentView = "stop";
+              $currentView = "stop";
             }}
-            selected={currentView === "stop"}
+            selected={$currentView === "stop"}
             ><span slot="label">STOPWATCH</span></Button
           >
           <Button
+            buttonTitle="Settings"
             buttonFunction={() => {
-              currentView = "settings";
+              $currentView = "settings";
             }}
-            selected={currentView === "settings"}
+            selected={$currentView === "settings"}
             withIcon
             noText
           >
@@ -57,21 +60,25 @@
           </Button>
         </div>
       </div>
-      {#if currentView === "pomo"}
-        <Pomodoro />
-      {:else if currentView === "stop"}
-        <Stopwatch />
+      <span transition:fly>
+        {#if $currentView === "pomo"}
+          <Pomodoro />
+        {:else if $currentView === "stop"}
+          <Stopwatch />
+        {/if}
+      </span>
+    </div>
+  </div>
+
+  <div class:settings={$currentView === "settings"} class="bottom-section">
+    <div class="section-container">
+      {#if $currentView !== "settings"}
+        <List pomodoroList={$currentView === "pomo"} />
       {:else}
         <Settings />
       {/if}
     </div>
   </div>
-
-  {#if currentView !== "settings"}
-    <div class="section-container bottom-section">
-      <List pomodoroList={currentView === "pomo"} />
-    </div>
-  {/if}
 </main>
 
 <style>
@@ -80,33 +87,45 @@
     flex-direction: column;
     min-height: 100vh;
   }
+
   .section-container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 1rem 0.4rem;
+    width: min(680px, 100%);
+  }
+
+  .top-section {
     position: sticky;
     top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     background-color: var(--accent-color);
-    padding: 1rem 0.4rem;
-  }
-
-  .top-section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: min(680px, 100%);
   }
 
   .bottom-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     color: #fff;
     background-color: #0a0a0a;
     flex-grow: 2;
+  }
+
+  .settings {
+    background-color: var(--accent-color);
   }
 
   @media (prefers-color-scheme: light) {
     .bottom-section {
       background-color: #dfdfdf;
       color: #0a0a0a;
+    }
+
+    .settings {
+      background-color: var(--accent-color);
     }
   }
 

@@ -15,14 +15,22 @@
 
 <div class="laps">
   <div class="left-side">
-    <p class="index">{index + 1}</p>
+    <div class="index">
+      <p>{index + 1}</p>
+    </div>
     <p>Lap <br /> <span class="time">{lapTime}</span></p>
     <p>Total <br /> <span class="time">{time}</span></p>
-    <!-- <input value={name} type="text" maxlength="23" placeholder="Lap name" /> -->
   </div>
 
   <div class="right-side">
-    <Button smaller destructive withIcon noText buttonFunction={deleteLap}>
+    <Button
+      buttonTitle="Delete time"
+      smaller
+      destructive
+      withIcon
+      noText
+      buttonFunction={deleteLap}
+    >
       <span slot="icon">
         <svg
           width="22"
@@ -66,16 +74,22 @@
   }
 
   .index {
-    font-size: 1rem;
-    height: 18px;
-    width: 18px;
-    color: #292929;
+    padding: 0.4rem;
     border: 1px #292929 solid;
     border-radius: 50px;
+    min-width: 36px;
+  }
+
+  .index p {
+    font-family: "Monument Extended";
+    font-size: 1rem;
+    color: #292929;
     text-align: center;
   }
 
   .time {
+    display: inline;
+    padding-top: 2px;
     font-family: "Monument Extended";
     margin: 0;
     font-size: 1.2rem;

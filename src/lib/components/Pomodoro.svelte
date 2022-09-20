@@ -10,6 +10,7 @@
 
 	let stopped = true;
 	let paused = false;
+	let done = false;
 	let buttonText = "Start";
 
 	let currentIndex = 0;
@@ -26,8 +27,11 @@
 		} else if (timer.status === "paused") {
 			timer.resume();
 		} else {
+			// THIS CAUSES ERROR WHEN COMPLETED THE FULL SET OF TIMERS
 			timer.start($timers[currentIndex].time * 60000, 1000);
 		}
+
+		done = false;
 
 		$controller = true;
 	};
@@ -37,6 +41,7 @@
 		$controller = false;
 		currentTimerCount = "00:00";
 		timer.stop();
+		done = false;
 	};
 
 	timer.on("tick", (ms) => {
@@ -77,17 +82,21 @@
 			"Timer " + currentName + " completed!",
 			"Now starting your next timer."
 		);
+		playSound();
+
 		$timers[currentIndex].completed = true;
 
-		if ($timers.length > currentIndex) {
-			currentIndex = currentIndex + 1;
+		currentIndex = currentIndex + 1;
+
+		if (currentIndex < $timers.length) {
 			startTimer();
 		} else {
 			currentIndex = 0;
-			console.log("Else lol");
+			done = true;
+			console.log(stopped + " " + paused);
 		}
 
-		console.log("Timer done");
+		//console.log("Timer done");
 	});
 </script>
 
@@ -95,7 +104,12 @@
 
 <div class="action-controls-container">
 	<div class="main-controls">
-		<Button withIcon buttonFunction={startTimer} disable={$timers.length === 0}>
+		<Button
+			buttonTitle="Start/pause the timer"
+			withIcon
+			buttonFunction={startTimer}
+			disable={$timers.length === 0 || done}
+		>
 			<span slot="icon">
 				{#if stopped || paused}
 					<svg
@@ -125,8 +139,8 @@
 			<span slot="label">{buttonText}</span>
 		</Button>
 
-		{#if !stopped}
-			<Button withIcon buttonFunction={stopTimer}>
+		{#if !stopped || done}
+			<Button buttonTitle="Stop the timer" withIcon buttonFunction={stopTimer}>
 				<span slot="icon">
 					<svg
 						width="22"
@@ -143,7 +157,12 @@
 		{/if}
 	</div>
 
-	<Button withIcon disable={!stopped} buttonFunction={newEntry}>
+	<Button
+		buttonTitle="Add a new timer"
+		withIcon
+		disable={!stopped || done}
+		buttonFunction={newEntry}
+	>
 		<span slot="icon">
 			<svg
 				width="22"
@@ -166,6 +185,14 @@
 		<span slot="label">Add timer</span>
 	</Button>
 </div>
+
+<svelte:head>
+	<title>
+		{$controller
+			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
+			: "TIMESETS"}
+	</title>
+</svelte:head>
 
 <style>
 	.timer-number {

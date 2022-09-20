@@ -1,7 +1,7 @@
 <script>
-  import { theme, showHour } from "../stores/settings.js";
+  import { theme, showHour, currentView } from "../stores/settings.js";
   import { resetTimers } from "../stores/timers.js";
-  import { showNotification } from "../utils/notifications.js";
+  import { showNotification, playSound } from "../utils/notifications.js";
 
   import Button from "../Button.svelte";
   import Switch from "../Toggle.svelte";
@@ -11,10 +11,24 @@
     localStorage.setItem("theme", color);
   };
 
+  let view = localStorage.getItem("view") || "pomo";
+
+  let soundEnabled = JSON.parse(localStorage.getItem("sound")) || true;
+
+  const toggleSound = (value) => {
+    localStorage.setItem("sound", value);
+    soundEnabled = value;
+    playSound();
+  };
+
   let notificationsEnabled =
     JSON.parse(localStorage.getItem("notifications")) || false;
 
-  const changeNotifications = (value) => {
+  const toggleNotifications = (value) => {
+    if (value) {
+      showNotification();
+    }
+
     notificationsEnabled = value;
     localStorage.setItem("notifications", value);
   };
@@ -28,26 +42,49 @@
 
     <div class="theme-options">
       <Button
+        buttonTitle="Green theme"
         buttonFunction={() => {
           changeTheme("#6bc80f");
         }}><span slot="label">Green</span></Button
       >
       <Button
+        buttonTitle="Purple theme"
         buttonFunction={() => {
           changeTheme("#5a0fc8");
         }}><span slot="label">Purple</span></Button
       >
       <Button
+        buttonTitle="Red theme"
         buttonFunction={() => {
           changeTheme("#c90e3b");
         }}><span slot="label">Red</span></Button
       >
       <Button
+        buttonTitle="Blue theme"
         buttonFunction={() => {
           changeTheme("#0f2cc8");
         }}><span slot="label">Blue</span></Button
       >
     </div>
+  </div>
+
+  <div class="setting">
+    <h2>Default view:</h2>
+
+    <Switch
+      isOn={view === "pomo"}
+      switchOn={() => {
+        view = "pomo";
+        localStorage.setItem("view", "pomo");
+      }}
+      switchOff={() => {
+        view = "stop";
+        localStorage.setItem("view", "stop");
+      }}
+    >
+      <span slot="labelYes">Pomodoro</span>
+      <span slot="labelNo">Stopwatch</span>
+    </Switch>
   </div>
 </div>
 
@@ -61,10 +98,10 @@
       <Switch
         isOn={notificationsEnabled}
         switchOn={() => {
-          changeNotifications(true);
+          toggleNotifications(true);
         }}
         switchOff={() => {
-          changeNotifications(false);
+          toggleNotifications(false);
         }}
       />
     </div>
@@ -75,19 +112,24 @@
   <h1>Pomodoro</h1>
 
   <div class="setting">
-    <h2>Play ticking sound while running:</h2>
-
-    <Switch />
-  </div>
-  <div class="setting">
     <h2>Play sound when completed:</h2>
 
-    <Switch />
+    <Switch
+      isOn={soundEnabled}
+      switchOn={() => {
+        toggleSound(true);
+      }}
+      switchOff={() => {
+        toggleSound(false);
+      }}
+    />
   </div>
   <div class="setting">
     <h2>Reset timers:</h2>
 
-    <Button buttonFunction={resetTimers}><span slot="label">Reset</span></Button
+    <Button
+      buttonTitle="Reset Pomodoro timers to default"
+      buttonFunction={resetTimers}><span slot="label">Reset</span></Button
     >
   </div>
 </div>
@@ -122,14 +164,18 @@
   .theme-options {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 2px;
   }
 
   h1 {
+    color: #000;
     padding: 1rem 0;
     font-size: 2rem;
   }
 
   h2 {
+    color: #000;
     font-size: 1.4rem;
   }
 
@@ -137,7 +183,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-top: 1px black solid;
+    border-top: 1px solid var(--grey-color);
     padding: 1rem 0;
   }
 </style>
