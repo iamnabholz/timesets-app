@@ -2,8 +2,6 @@
   import { theme, currentView } from "./lib/stores/settings.js";
   import { pomodoroState, stopwatchState } from "./lib/stores/timers.js";
 
-  import { fly } from "svelte/transition";
-
   import Pomodoro from "./lib/components/Pomodoro.svelte";
   import Stopwatch from "./lib/components/Stopwatch.svelte";
   import Settings from "./lib/components/Settings.svelte";
@@ -21,7 +19,7 @@
           <Button
             buttonTitle="Pomodoro mode"
             buttonFunction={() => {
-              if ($pomodoroState) {
+              if ($stopwatchState) {
                 if (
                   window.confirm("Currently running timers will be stopped")
                 ) {

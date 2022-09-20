@@ -33,7 +33,6 @@
   "include": [
     "src/**/*.d.ts",
     "src/**/*.js",
-    "src/**/*.svelte",
-    "public/service-worker.js"
+    "src/**/*.svelte"
   ]
 }
