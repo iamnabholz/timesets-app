@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({ 
       injectRegister: 'inline',
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'fonts/*.woff', 'fonts/*.woff2', 'icons/*.png',  'sounds/*.wav'],
+      includeAssets: ['assets/*.*.js', 'assets/*.*.css', 'favicon.ico', 'fonts/*.woff', 'fonts/*.woff2', 'icons/*.png',  'sounds/*.wav'],
       manifest: {
         "name": "Timesets",
         "short_name": "Timesets",
@@ -39,6 +39,10 @@ export default defineConfig({
             "purpose": "maskable any"
           }
         ]
+      },
+      devOptions: {
+        enabled: true
+        /* other options */
       }
     })
   ]
