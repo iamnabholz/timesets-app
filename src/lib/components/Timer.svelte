@@ -1,5 +1,10 @@
 <script>
-	import { timers, pomodoroState } from "../stores/timers.js";
+	import {
+		timers,
+		pomodoroState,
+		runningTimerId,
+		pomodoroPaused,
+	} from "../stores/timers.js";
 
 	import Button from "../Button.svelte";
 
@@ -58,26 +63,35 @@
 	};
 </script>
 
-<div class:completed-timer={completed} class="timer-container">
-	<div class="left-side" class:completed>
+<div
+	class:blink={$runningTimerId === id && $pomodoroPaused}
+	class="timer-container"
+>
+	<div class="left-side">
 		{#if completed}
-			<p class="completed">COMPLETED</p>
+			<div class="completed-indicator" />
 		{/if}
 
-		<span class="title-text">
-			<input
-				bind:value={newName}
-				on:blur={updateTimer}
-				on:submit={updateTimer}
-				readonly={$pomodoroState}
-				type="text"
-				maxlength="23"
-				placeholder="Timer name"
+		{#if $runningTimerId === id}
+			<div
+				style="animation-play-state: {$pomodoroPaused ? 'paused' : 'running'};"
+				class="spinning-indicator"
 			/>
-		</span>
+		{/if}
+
+		<input
+			class:completed
+			bind:value={newName}
+			on:blur={updateTimer}
+			on:submit={updateTimer}
+			readonly={$pomodoroState}
+			type="text"
+			maxlength="23"
+			placeholder="Timer name"
+		/>
 	</div>
 
-	<div class="right-side">
+	<div class="right-side" class:completed>
 		<span class="time-text">
 			<input
 				bind:value={newTime}
@@ -140,28 +154,57 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 1rem 0;
-		border-top: 1px solid #292929;
 		height: 80px;
-		column-gap: 12px;
 		max-width: 100%;
+		--indicator-size: 22px;
+		--indicator-border: 4px;
 	}
 
-	.left-side {
-		display: flex;
-		flex-direction: column;
-	}
-
+	.left-side,
 	.right-side {
 		display: flex;
 		align-items: center;
 		column-gap: 12px;
 	}
 
-	.completed {
-		margin-bottom: -8px;
+	.spinning-indicator {
+		margin: auto;
+		border: var(--indicator-border) solid var(--separator-color);
+		border-radius: 50%;
+		border-bottom-color: var(--accent-color);
+		height: var(--indicator-size);
+		width: var(--indicator-size);
+		animation: spinner 4s linear infinite;
 	}
 
-	.completed-timer {
+	@keyframes spinner {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	.completed-indicator {
+		margin: auto;
+		background-color: var(--accent-color);
+		border-radius: 50%;
+		height: var(--indicator-size);
+		width: var(--indicator-size);
+	}
+
+	.completed-indicator::after {
+		content: url('data:image/svg+xml;charset=UTF-8, <svg width="24" height="24" viewBox="00 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M4 12L10 18L20 5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+		height: 100%;
+		width: 100%;
+		padding-top: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.completed {
 		opacity: 0.5;
 	}
 
@@ -185,6 +228,18 @@
 	}
 
 	input[type="text"] {
-		width: 100%;
+		border-right: 1px;
+	}
+
+	@media screen and (max-width: 600px) {
+		.timer-container {
+			--indicator-size: 28px;
+			--indicator-border: 5px;
+		}
+
+		.left-side,
+		.right-side {
+			column-gap: 6px;
+		}
 	}
 </style>

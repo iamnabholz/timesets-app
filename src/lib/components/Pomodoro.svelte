@@ -4,7 +4,13 @@
 	import Button from "../Button.svelte";
 
 	import Timer from "tiny-timer";
-	import { timers, newEntry, pomodoroState } from "../stores/timers.js";
+	import {
+		timers,
+		newEntry,
+		pomodoroState,
+		runningTimerId,
+		pomodoroPaused,
+	} from "../stores/timers.js";
 
 	const timer = new Timer();
 
@@ -13,12 +19,14 @@
 	let done = false;
 	let buttonText = "Start";
 
+	$: $pomodoroPaused = paused;
+
 	let currentIndex = 0;
 
 	let currentTimerCount = "00:00";
 
 	onDestroy(() => {
-		$pomodoroState = false;
+		stopTimer();
 	});
 
 	const startTimer = () => {
@@ -34,14 +42,16 @@
 		done = false;
 
 		$pomodoroState = true;
+		$runningTimerId = $timers[currentIndex].id;
 	};
 
 	const stopTimer = () => {
+		done = false;
 		currentIndex = 0;
-		$pomodoroState = false;
 		currentTimerCount = "00:00";
 		timer.stop();
-		done = false;
+		$pomodoroState = false;
+		$runningTimerId = 0;
 	};
 
 	timer.on("tick", (ms) => {

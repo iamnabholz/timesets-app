@@ -11,7 +11,7 @@
 	const timer = new Timer({ stopwatch: true });
 
 	onDestroy(() => {
-		$laps = [];
+		stopTimer();
 	});
 
 	let currentDelay = 0;
@@ -32,7 +32,7 @@
 		} else if (timer.status === "paused") {
 			timer.resume();
 		} else {
-			timer.start(36000000, 1000);
+			timer.start(35999000, 1000);
 		}
 
 		$stopwatchState = true;
@@ -55,8 +55,11 @@
 
 	function timeAdapter(ms) {
 		let hours = Math.floor(ms / 3600000);
-		let minutes = Math.floor(ms / 60000);
+
+		let minutesMs = Math.floor(ms - 3600000 * hours);
+		let minutes = Math.floor(minutesMs / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
+
 		if ($showHour || hours > 0) {
 			return (
 				hours +

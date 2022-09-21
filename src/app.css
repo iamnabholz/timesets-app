@@ -18,7 +18,14 @@
 
 :root {
   --accent-color: #CB2A37;
-  --grey-color: rgba(0, 0, 0, 0.2);
+  --separator-color: rgba(255, 255, 255, 0.08);
+  --grey-color: #808080;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --separator-color: rgba(0, 0, 0, 0.2);
+  }
 }
 
 *,

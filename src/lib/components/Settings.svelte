@@ -6,6 +6,8 @@
   import Button from "../Button.svelte";
   import Switch from "../Toggle.svelte";
 
+  let appVersion = "1.0";
+
   const themeOptions = {
     Green: "#69A98B",
     Yellow: "#E5A441",
@@ -15,6 +17,27 @@
   };
 
   $: currentTheme = $theme;
+  $: separatorColor = colorLuminance(currentTheme);
+
+  const colorLuminance = (hex) => {
+    // validate hex string
+    hex = String(hex).replace(/[^0-9a-f]/gi, "");
+    if (hex.length < 6) {
+      hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+    }
+
+    // convert to decimal and change luminosity
+    var rgb = "#",
+      c,
+      i;
+    for (i = 0; i < 3; i++) {
+      c = parseInt(hex.substr(i * 2, 2), 16);
+      c = Math.round(Math.min(Math.max(0, c + c * -0.2), 255)).toString(16);
+      rgb += ("00" + c).substr(c.length);
+    }
+
+    return rgb;
+  };
 
   const changeTheme = (color) => {
     $theme = color;
@@ -52,20 +75,14 @@
   };
 </script>
 
-<div class="settings-column">
+<div
+  class="settings-column"
+  style="--custom-separator-color: {separatorColor};"
+>
   <div class="settings-container">
-    <div>
-      <h1>Settings</h1>
+    <h1>Settings</h1>
 
-      <div class="setting">
-        <p>Timesets v1.20</p>
-        <a rel="noreferrer" target="_blank" href="https://nabholz.work/"
-          >nabholz.work &#8599;
-        </a>
-      </div>
-    </div>
-
-    <div class="setting separator">
+    <div class="setting">
       <h2>Theme:</h2>
 
       <div class="theme-options">
@@ -81,7 +98,7 @@
       </div>
     </div>
 
-    <div class="setting separator">
+    <div class="setting">
       <h2>Default view:</h2>
 
       <Switch
@@ -105,7 +122,7 @@
     <div class="settings-container">
       <h1>Alerts</h1>
 
-      <div class="setting separator">
+      <div class="setting">
         <h2>Enable notifications:</h2>
 
         <Switch
@@ -124,7 +141,7 @@
   <div class="settings-container">
     <h1>Pomodoro</h1>
 
-    <div class="setting separator">
+    <div class="setting">
       <h2>Play sound when completed:</h2>
 
       <Switch
@@ -137,7 +154,7 @@
         }}
       />
     </div>
-    <div class="setting separator">
+    <div class="setting">
       <h2>Reset timers:</h2>
 
       <Button
@@ -150,7 +167,7 @@
   <div class="settings-container">
     <h1>Stopwatch</h1>
 
-    <div class="setting separator">
+    <div class="setting">
       <h2>Play sound on new laps:</h2>
 
       <Switch
@@ -164,7 +181,7 @@
       />
     </div>
 
-    <div class="setting separator">
+    <div class="setting">
       <h2>Always show hours:</h2>
 
       <Switch
@@ -180,6 +197,22 @@
       />
     </div>
   </div>
+
+  <div class="information">
+    <p>
+      Timesets v {appVersion}
+    </p>
+    <p>
+      Made by <a rel="noreferrer" target="_blank" href="https://nabholz.work/"
+        >nabholz.work &#8599;
+      </a>
+    </p>
+    <p style="line-height: 1.4;">
+      If you found a problem or have any suggestion you can send me an email at:
+      <br />
+      support@nabholz.work
+    </p>
+  </div>
 </div>
 
 <svelte:head>
@@ -191,6 +224,8 @@
     display: flex;
     flex-direction: column;
     row-gap: 2rem;
+
+    --custom-separator-color: rgba(0, 0, 0, 0.2);
   }
 
   .settings-container {
@@ -198,15 +233,21 @@
     flex-direction: column;
   }
 
-  .separator {
-    border-top: 1px solid var(--grey-color);
-  }
-
   .setting {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 0;
+    position: relative;
+  }
+
+  .setting::before {
+    content: "";
+    position: absolute;
+    border-top: 1px solid var(--custom-separator-color);
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 
   .theme-options {
@@ -229,5 +270,14 @@
 
   p {
     color: #000;
+  }
+
+  .information {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    row-gap: 10px;
+    padding-bottom: 4rem;
   }
 </style>

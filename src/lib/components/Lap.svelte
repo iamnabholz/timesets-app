@@ -63,7 +63,6 @@
 
 <style>
   .laps {
-    border-top: 1px solid #292929;
     padding: 1rem 0;
     display: flex;
     justify-content: space-between;
@@ -75,7 +74,7 @@
 
   .index {
     padding: 0.4rem;
-    border: 1px #292929 solid;
+    border: 1px var(--grey-color) solid;
     border-radius: 50px;
     min-width: 36px;
   }
@@ -83,7 +82,7 @@
   .index p {
     font-family: "Monument Extended";
     font-size: 1rem;
-    color: #292929;
+    color: var(--grey-color);
     text-align: center;
   }
 

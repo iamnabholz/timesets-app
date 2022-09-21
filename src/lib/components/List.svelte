@@ -62,7 +62,7 @@
 			</div>
 
 			{#each $timers as timer (timer.id)}
-				<div transition:slide|local>
+				<div class="list-item" transition:slide|local>
 					<Timer {...timer} />
 				</div>
 			{/each}
@@ -74,10 +74,12 @@
 	{/if}
 {:else if $laps.length > 0}
 	<div class="list-container">
-		<p class="list-title">SAVED TIMES</p>
+		<div class="list-header">
+			<p>SAVED TIMES</p>
+		</div>
 
 		{#each $laps as lap (lap.id)}
-			<div transition:slide|local>
+			<div class="list-item" transition:slide|local>
 				<Lap {...lap} />
 			</div>
 		{/each}
@@ -97,18 +99,19 @@
 	.list-header {
 		display: flex;
 		justify-content: space-between;
+		color: var(--grey-color);
+		margin-bottom: 16px;
+	}
+
+	.list-item {
+		border-top: 1px solid var(--separator-color);
 	}
 
 	.empty-list {
 		display: flex;
 		justify-content: center;
 		margin-top: 10vh;
-	}
-
-	.list-title,
-	.list-header {
-		color: inherit;
-		margin-bottom: 16px;
+		opacity: 0.5;
 	}
 
 	.time {

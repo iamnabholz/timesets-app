@@ -103,6 +103,8 @@ export const resetTimers = () => {
 }
 
 export const pomodoroState = writable(false);
+export const runningTimerId = writable(0);
+export const pomodoroPaused = writable(false);
 
 export const stopwatchState = writable(false);
 
