@@ -10,7 +10,7 @@ export default defineConfig({
     VitePWA({ 
       injectRegister: 'inline',
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icons/icon-32.png', 'icons/icon-192.png', 'icons/icon-512.png'],
+      includeAssets: ['favicon.ico', 'fonts/*.woff', 'fonts/*.woff2', 'icons/*.png',  'sounds/*.wav'],
       manifest: {
         "name": "Timesets",
         "short_name": "Timesets",
