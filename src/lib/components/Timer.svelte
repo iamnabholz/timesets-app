@@ -26,7 +26,7 @@
 	};
 
 	const updateTimer = () => {
-		if (newTime.length < 1) {
+		if (newTime === null || newTime.length < 1) {
 			newTime = time;
 		}
 
@@ -49,17 +49,23 @@
 		};
 
 		timers.modify(entry);
+
+		if (newTime.toString().length < 2 && newTime < 10) {
+			newTime = "0" + newTime;
+		}
 	};
 
 	const checkTime = () => {
-		let text = newTime.toString();
-		text = text.trim();
-		text = text.replace(/\D/g, "");
-		if (text.length > 2) {
-			text = text.substring(1);
-		}
+		if (newTime) {
+			let text = newTime.toString();
+			text = text.trim();
+			text = text.replace(/\D/g, "");
+			if (text.length > 2) {
+				text = text.substring(1);
+			}
 
-		newTime = parseInt(text);
+			newTime = parseInt(text);
+		}
 	};
 </script>
 
@@ -68,17 +74,6 @@
 	class="timer-container"
 >
 	<div class="left-side">
-		{#if completed}
-			<div class="completed-indicator" />
-		{/if}
-
-		{#if $runningTimerId === id}
-			<div
-				style="animation-play-state: {$pomodoroPaused ? 'paused' : 'running'};"
-				class="spinning-indicator"
-			/>
-		{/if}
-
 		<input
 			class:completed
 			bind:value={newName}
@@ -91,9 +86,23 @@
 		/>
 	</div>
 
-	<div class="right-side" class:completed>
+	<div class="right-side">
 		<span class="time-text">
+			{#if completed}
+				<div class="completed-indicator" />
+			{/if}
+
+			{#if $runningTimerId === id && !completed}
+				<div
+					style="animation-play-state: {$pomodoroPaused
+						? 'paused'
+						: 'running'};"
+					class="spinning-indicator"
+				/>
+			{/if}
+
 			<input
+				class:completed
 				bind:value={newTime}
 				on:input={checkTime}
 				on:blur={updateTimer}
@@ -105,7 +114,7 @@
 				min="1"
 				placeholder="00"
 			/>
-			<p class="time-text">:00</p>
+			<p class:completed class="time-text">:00</p>
 		</span>
 
 		{#if !$pomodoroState}
@@ -154,13 +163,13 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 1rem 0;
+		column-gap: 6px;
 		height: 80px;
 		max-width: 100%;
 		--indicator-size: 22px;
 		--indicator-border: 4px;
 	}
 
-	.left-side,
 	.right-side {
 		display: flex;
 		align-items: center;
@@ -228,7 +237,7 @@
 	}
 
 	input[type="text"] {
-		border-right: 1px;
+		width: 100%;
 	}
 
 	@media screen and (max-width: 600px) {
@@ -237,7 +246,6 @@
 			--indicator-border: 5px;
 		}
 
-		.left-side,
 		.right-side {
 			column-gap: 6px;
 		}

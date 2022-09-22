@@ -6,6 +6,16 @@
   import Button from "../Button.svelte";
   import Switch from "../Toggle.svelte";
 
+  let view = localStorage.getItem("view") || "pomo";
+
+  let timerSoundEnabled =
+    JSON.parse(localStorage.getItem("timerSound")) || false;
+
+  let lapSoundEnabled = JSON.parse(localStorage.getItem("lapSound")) || false;
+  let notificationsEnabled =
+    JSON.parse(localStorage.getItem("notifications")) || false;
+  let autoStartEnabled = JSON.parse(localStorage.getItem("autoStart")) || false;
+
   let appVersion = "1.0";
 
   const themeOptions = {
@@ -40,38 +50,34 @@
   };
 
   const changeTheme = (color) => {
-    $theme = color;
     localStorage.setItem("theme", color);
+    $theme = color;
   };
-
-  let view = localStorage.getItem("view") || "pomo";
-
-  let timerSound = JSON.parse(localStorage.getItem("timerSound")) || true;
 
   const toggleTimerSound = (value) => {
-    localStorage.setItem("timerSound", value);
-    timerSound = value;
     playSound("done");
+    localStorage.setItem("timerSound", value);
+    timerSoundEnabled = value;
   };
-
-  let lapSound = JSON.parse(localStorage.getItem("lapSound")) || true;
 
   const toggleLapSound = (value) => {
-    localStorage.setItem("lapSound", value);
-    lapSound = value;
     playSound("lap");
+    localStorage.setItem("lapSound", value);
+    lapSoundEnabled = value;
   };
-
-  let notificationsEnabled =
-    JSON.parse(localStorage.getItem("notifications")) || false;
 
   const toggleNotifications = (value) => {
     if (value) {
       showNotification();
     }
 
-    notificationsEnabled = value;
     localStorage.setItem("notifications", value);
+    notificationsEnabled = value;
+  };
+
+  const toggleAutoStart = (value) => {
+    localStorage.setItem("autoStart", value);
+    autoStartEnabled = value;
   };
 </script>
 
@@ -142,10 +148,23 @@
     <h1>Pomodoro</h1>
 
     <div class="setting">
+      <h2>Auto-start next timer:</h2>
+
+      <Switch
+        isOn={autoStartEnabled}
+        switchOn={() => {
+          toggleAutoStart(true);
+        }}
+        switchOff={() => {
+          toggleAutoStart(false);
+        }}
+      />
+    </div>
+    <div class="setting">
       <h2>Play sound when completed:</h2>
 
       <Switch
-        isOn={timerSound}
+        isOn={timerSoundEnabled}
         switchOn={() => {
           toggleTimerSound(true);
         }}
@@ -171,7 +190,7 @@
       <h2>Play sound on new laps:</h2>
 
       <Switch
-        isOn={lapSound}
+        isOn={lapSoundEnabled}
         switchOn={() => {
           toggleLapSound(true);
         }}

@@ -16,6 +16,7 @@
 
 	let stopped = true;
 	let paused = false;
+	let waiting = false;
 	let done = false;
 	let buttonText = "Start";
 
@@ -33,10 +34,15 @@
 		if (timer.status === "running") {
 			timer.pause();
 		} else if (timer.status === "paused") {
+			waiting = false;
 			timer.resume();
 		} else {
-			// THIS CAUSES ERROR WHEN COMPLETED THE FULL SET OF TIMERS
 			timer.start($timers[currentIndex].time * 60000, 1000);
+		}
+
+		if (waiting) {
+			timer.pause();
+			buttonText = "Continue";
 		}
 
 		done = false;
@@ -46,6 +52,7 @@
 	};
 
 	const stopTimer = () => {
+		waiting = false;
 		done = false;
 		currentIndex = 0;
 		currentTimerCount = "00:00";
@@ -61,13 +68,13 @@
 	function timeAdapter(ms) {
 		let minutes = Math.floor(ms / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
-		return (
-			(minutes < 10 ? "0" : "") +
-			minutes +
-			":" +
-			(parseInt(seconds) < 10 ? "0" : "") +
-			seconds
-		);
+		return parseInt(seconds) === 60
+			? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+			: (minutes < 10 ? "0" : "") +
+					minutes +
+					":" +
+					(parseInt(seconds) < 10 ? "0" : "") +
+					seconds;
 	}
 
 	timer.on("statusChanged", (status) => {
@@ -95,11 +102,20 @@
 		currentIndex = currentIndex + 1;
 
 		if (currentIndex < $timers.length) {
+			if (JSON.parse(localStorage.getItem("autoStart"))) {
+				showNotification(
+					"'" + currentName + "' completed!",
+					"Your next timer has started now."
+				);
+			} else {
+				waiting = true;
+
+				showNotification(
+					"'" + currentName + "' completed!",
+					"Check the app to start your next time."
+				);
+			}
 			startTimer();
-			showNotification(
-				"'" + currentName + "' completed!",
-				"Your next timer has started now."
-			);
 		} else {
 			currentIndex = 0;
 			done = true;
@@ -108,8 +124,6 @@
 				"You have completed all of your timers."
 			);
 		}
-
-		//console.log("Timer done");
 	});
 </script>
 
@@ -118,7 +132,7 @@
 <div class="action-controls-container">
 	<div class="main-controls">
 		<Button
-			buttonTitle="Start/pause the timer"
+			buttonTitle={buttonText + " timer"}
 			withIcon
 			buttonFunction={startTimer}
 			disable={$timers.length === 0 || done}
