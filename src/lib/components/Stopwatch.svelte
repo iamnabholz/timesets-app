@@ -4,7 +4,7 @@
 	import Timer from "tiny-timer";
 	import { stopwatchState, laps } from "../stores/timers.js";
 	import { showHour } from "../stores/settings.js";
-	import { playSound } from "../utils/notifications.js";
+	import { showNotification, playSound } from "../utils/notifications.js";
 
 	import Button from "../Button.svelte";
 
@@ -95,6 +95,13 @@
 			paused = true;
 			stopped = false;
 		}
+	});
+
+	timer.on("done", () => {
+		showNotification(
+			"Stopwatch has reached it's time limit.",
+			"The stopwatch has reached the maximum time of 10 hours."
+		);
 	});
 
 	const newLap = () => {
