@@ -1,4 +1,6 @@
 <script>
+	import { fly } from "svelte/transition";
+
 	import {
 		timers,
 		pomodoroState,
@@ -118,41 +120,43 @@
 		</span>
 
 		{#if !$pomodoroState}
-			<Button
-				buttonTitle="Delete timer"
-				smaller
-				destructive
-				withIcon
-				noText
-				buttonFunction={deleteTimer}
-			>
-				<span slot="icon">
-					<svg
-						width="22"
-						height="22"
-						viewBox="0 0 22 22"
-						fill="currentColor"
-						xmlns="http://www.w3.org/2000/svg"
-					>
-						<rect
-							x="15.6067"
-							y="5"
-							width="3"
-							height="15"
-							rx="1"
-							transform="rotate(45 15.6067 5)"
-						/>
-						<rect
-							x="17.728"
-							y="15.6066"
-							width="3"
-							height="15"
-							rx="1"
-							transform="rotate(135 17.728 15.6066)"
-						/>
-					</svg>
-				</span>
-			</Button>
+			<div in:fly={{ x: 20 }}>
+				<Button
+					buttonTitle="Delete timer"
+					smaller
+					destructive
+					withIcon
+					noText
+					buttonFunction={deleteTimer}
+				>
+					<span slot="icon">
+						<svg
+							width="22"
+							height="22"
+							viewBox="0 0 22 22"
+							fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<rect
+								x="15.6067"
+								y="5"
+								width="3"
+								height="15"
+								rx="1"
+								transform="rotate(45 15.6067 5)"
+							/>
+							<rect
+								x="17.728"
+								y="15.6066"
+								width="3"
+								height="15"
+								rx="1"
+								transform="rotate(135 17.728 15.6066)"
+							/>
+						</svg>
+					</span>
+				</Button>
+			</div>
 		{/if}
 	</div>
 </div>

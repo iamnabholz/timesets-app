@@ -221,6 +221,13 @@
     <p>
       Timesets v {appVersion}
     </p>
+    <a href="https://www.buymeacoffee.com/nabholz" target="_blank"
+      ><img
+        src="/img/bmac-button.png"
+        alt="Buy Me A Coffee"
+        style="height: 40px !important;width: 145px !important;"
+      /></a
+    >
     <p>
       Made by <a rel="noreferrer" target="_blank" href="https://nabholz.work/"
         >nabholz.work &#8599;
