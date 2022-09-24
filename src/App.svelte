@@ -8,6 +8,10 @@
 
   import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
+
+  $: if ($currentView) {
+    localStorage.setItem("view", $currentView);
+  }
 </script>
 
 <main style="--accent-color: {$theme}">

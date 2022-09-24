@@ -3,7 +3,7 @@
 
 	import Timer from "tiny-timer";
 	import { stopwatchState, laps } from "../stores/timers.js";
-	import { showHour } from "../stores/settings.js";
+	import { hideHour } from "../stores/settings.js";
 	import { showNotification, playSound } from "../utils/notifications.js";
 
 	import Button from "../Button.svelte";
@@ -20,7 +20,7 @@
 	let paused = false;
 	let buttonText = "Start";
 
-	let defaultTime = $showHour ? "0:00:00" : "00:00";
+	let defaultTime = !$hideHour ? "0:00:00" : "00:00";
 
 	let timerCountInMs = 0;
 	let currentTimerCount = defaultTime;
@@ -60,7 +60,7 @@
 		let minutes = Math.floor(minutesMs / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
 
-		if ($showHour || hours > 0) {
+		if (!$hideHour || hours > 0) {
 			return (
 				hours +
 				":" +
@@ -127,7 +127,7 @@
 		<p>Total</p>
 
 		<h1
-			class:smaller-time={$showHour}
+			class:smaller-time={!$hideHour}
 			class:blink={paused}
 			class="timer-number"
 		>
@@ -139,7 +139,7 @@
 		<p>Lap</p>
 
 		<h1
-			class:smaller-time={$showHour}
+			class:smaller-time={!$hideHour}
 			class:blink={paused}
 			class="timer-number"
 		>

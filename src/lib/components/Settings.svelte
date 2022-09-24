@@ -1,12 +1,10 @@
 <script>
-  import { theme, showHour } from "../stores/settings.js";
+  import { theme, hideHour } from "../stores/settings.js";
   import { resetTimers } from "../stores/timers.js";
   import { showNotification, playSound } from "../utils/notifications.js";
 
   import Button from "../Button.svelte";
   import Switch from "../Toggle.svelte";
-
-  let view = localStorage.getItem("view") || "pomo";
 
   let timerSoundEnabled =
     JSON.parse(localStorage.getItem("timerSound")) || false;
@@ -103,25 +101,6 @@
         {/each}
       </div>
     </div>
-
-    <div class="setting">
-      <h2>Default view:</h2>
-
-      <Switch
-        isOn={view === "pomo"}
-        switchOn={() => {
-          view = "pomo";
-          localStorage.setItem("view", "pomo");
-        }}
-        switchOff={() => {
-          view = "stop";
-          localStorage.setItem("view", "stop");
-        }}
-      >
-        <span slot="labelYes">Pomodoro</span>
-        <span slot="labelNo">Stopwatch</span>
-      </Switch>
-    </div>
   </div>
 
   {#if "Notification" in window}
@@ -204,14 +183,14 @@
       <h2>Always show hours:</h2>
 
       <Switch
-        isOn={$showHour}
+        isOn={!$hideHour}
         switchOn={() => {
-          $showHour = true;
-          localStorage.setItem("showHour", "true");
+          $hideHour = false;
+          localStorage.setItem("hideHour", "false");
         }}
         switchOff={() => {
-          $showHour = false;
-          localStorage.setItem("showHour", "false");
+          $hideHour = true;
+          localStorage.setItem("hideHour", "true");
         }}
       />
     </div>

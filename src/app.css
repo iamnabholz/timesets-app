@@ -99,6 +99,7 @@ button {
 }
 
 a {
+  display: inline-block;
   color: initial;
   transition: all 150ms ease;
 }
@@ -108,7 +109,7 @@ a:visited {
 }
 
 a:hover {
-  transform: translate(-2px, -2px);
+  transform: translateY(-2px);
   color: #fff;
 }
 

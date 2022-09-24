@@ -120,7 +120,7 @@
 		</span>
 
 		{#if !$pomodoroState}
-			<div in:fly={{ x: 20 }}>
+			<div in:fly|local={{ x: 20 }}>
 				<Button
 					buttonTitle="Delete timer"
 					smaller
