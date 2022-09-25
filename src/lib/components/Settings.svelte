@@ -10,9 +10,11 @@
     JSON.parse(localStorage.getItem("timerSound")) || false;
 
   let lapSoundEnabled = JSON.parse(localStorage.getItem("lapSound")) || false;
+
   let notificationsEnabled =
     JSON.parse(localStorage.getItem("notifications")) || false;
-  let autoStartEnabled = JSON.parse(localStorage.getItem("autoStart")) || false;
+
+  let waitForStart = JSON.parse(localStorage.getItem("waitForStart")) || false;
 
   let appVersion = "1.0";
 
@@ -53,13 +55,17 @@
   };
 
   const toggleTimerSound = (value) => {
-    playSound("done");
+    if (value) {
+      playSound("done");
+    }
     localStorage.setItem("timerSound", value);
     timerSoundEnabled = value;
   };
 
   const toggleLapSound = (value) => {
-    playSound("lap");
+    if (value) {
+      playSound("lap");
+    }
     localStorage.setItem("lapSound", value);
     lapSoundEnabled = value;
   };
@@ -74,8 +80,8 @@
   };
 
   const toggleAutoStart = (value) => {
-    localStorage.setItem("autoStart", value);
-    autoStartEnabled = value;
+    localStorage.setItem("waitForStart", value);
+    waitForStart = value;
   };
 </script>
 
@@ -127,10 +133,10 @@
     <h1>Pomodoro</h1>
 
     <div class="setting">
-      <h2>Auto-start next timer:</h2>
+      <h2>Confirm before starting next timer:</h2>
 
       <Switch
-        isOn={autoStartEnabled}
+        isOn={waitForStart}
         switchOn={() => {
           toggleAutoStart(true);
         }}

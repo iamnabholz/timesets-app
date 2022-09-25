@@ -69,6 +69,11 @@ pre {
   line-height: 1;
 
   -webkit-appearance: none;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
 }
 
 table {

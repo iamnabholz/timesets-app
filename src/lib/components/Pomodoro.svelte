@@ -102,7 +102,7 @@
 		currentIndex = currentIndex + 1;
 
 		if (currentIndex < $timers.length) {
-			if (JSON.parse(localStorage.getItem("autoStart"))) {
+			if (!JSON.parse(localStorage.getItem("waitForStart"))) {
 				showNotification(
 					"'" + currentName + "' completed!",
 					"Your next timer has started now."

@@ -91,7 +91,18 @@
 	<div class="right-side">
 		<span class="time-text">
 			{#if completed}
-				<div class="completed-indicator" />
+				<div class="completed-indicator">
+					<svg
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						xmlns="http://www.w3.org/2000/svg"
+						><path
+							fill-rule="evenodd"
+							clip-rule="evenodd"
+							d="M18.6701 7.25774C19.0801 7.62783 19.1124 8.26017 18.7423 8.67011L10.6173 17.6701C10.2547 18.0718 9.63834 18.1121 9.22646 17.7612L4.35146 13.6073C3.93108 13.2491 3.88067 12.618 4.23886 12.1976C4.59705 11.7772 5.22821 11.7268 5.64858 12.085L9.78392 15.6086L17.2578 7.32991C17.6278 6.91996 18.2602 6.88765 18.6701 7.25774Z"
+						/></svg
+					>
+				</div>
 			{/if}
 
 			{#if $runningTimerId === id && !completed}
@@ -137,21 +148,10 @@
 							fill="currentColor"
 							xmlns="http://www.w3.org/2000/svg"
 						>
-							<rect
-								x="15.6067"
-								y="5"
-								width="3"
-								height="15"
-								rx="1"
-								transform="rotate(45 15.6067 5)"
-							/>
-							<rect
-								x="17.728"
-								y="15.6066"
-								width="3"
-								height="15"
-								rx="1"
-								transform="rotate(135 17.728 15.6066)"
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M16.147 4.70708C15.7565 4.31655 15.1233 4.31655 14.7328 4.70708L10.8639 8.57591L6.99504 4.70708C6.60452 4.31656 5.97135 4.31656 5.58082 4.70708L4.70704 5.58086C4.31651 5.97138 4.31651 6.60455 4.70704 6.99507L8.5759 10.8639L4.70696 14.7328C4.31643 15.1233 4.31643 15.7565 4.70696 16.147L5.58074 17.0208C5.97127 17.4113 6.60444 17.4113 6.99496 17.0208L10.8639 13.1519L14.7329 17.0208C15.1234 17.4113 15.7565 17.4113 16.1471 17.0208L17.0209 16.147C17.4114 15.7565 17.4114 15.1233 17.0209 14.7328L13.1519 10.8639L17.0208 6.99506C17.4113 6.60454 17.4113 5.97138 17.0208 5.58086L16.147 4.70708Z"
 							/>
 						</svg>
 					</span>
@@ -172,6 +172,10 @@
 		max-width: 100%;
 		--indicator-size: 22px;
 		--indicator-border: 4px;
+	}
+
+	.left-side .completed {
+		text-decoration: line-through;
 	}
 
 	.right-side {
@@ -205,16 +209,6 @@
 		border-radius: 50%;
 		height: var(--indicator-size);
 		width: var(--indicator-size);
-	}
-
-	.completed-indicator::after {
-		content: url('data:image/svg+xml;charset=UTF-8, <svg width="24" height="24" viewBox="00 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M4 12L10 18L20 5" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>');
-		height: 100%;
-		width: 100%;
-		padding-top: 4px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
 	}
 
 	.completed {

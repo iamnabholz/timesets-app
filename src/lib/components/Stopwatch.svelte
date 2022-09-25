@@ -64,20 +64,22 @@
 			return (
 				hours +
 				":" +
-				(minutes < 10 ? "0" : "") +
-				minutes +
-				":" +
-				(parseInt(seconds) < 10 ? "0" : "") +
-				seconds
+				(parseInt(seconds) === 60
+					? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+					: (minutes < 10 ? "0" : "") +
+					  minutes +
+					  ":" +
+					  (parseInt(seconds) < 10 ? "0" : "") +
+					  seconds)
 			);
 		} else {
-			return (
-				(minutes < 10 ? "0" : "") +
-				minutes +
-				":" +
-				(parseInt(seconds) < 10 ? "0" : "") +
-				seconds
-			);
+			return parseInt(seconds) === 60
+				? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+				: (minutes < 10 ? "0" : "") +
+						minutes +
+						":" +
+						(parseInt(seconds) < 10 ? "0" : "") +
+						seconds;
 		}
 	}
 

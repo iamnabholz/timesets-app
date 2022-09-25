@@ -9,7 +9,7 @@
   import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
 
-  $: if ($currentView) {
+  $: if ($currentView !== "settings") {
     localStorage.setItem("view", $currentView);
   }
 </script>
