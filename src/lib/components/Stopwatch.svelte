@@ -2,8 +2,8 @@
 	import { onDestroy } from "svelte";
 
 	import Timer from "tiny-timer";
-	import { stopwatchState, laps } from "../stores/timers.js";
-	import { hideHour } from "../stores/settings.js";
+	import { stopwatchState, laps, pomodoroState } from "../stores/timers.js";
+	import { hideHour, currentView } from "../stores/settings.js";
 	import { showNotification, playSound } from "../utils/notifications.js";
 
 	import Button from "../Button.svelte";
@@ -20,11 +20,13 @@
 	let paused = false;
 	let buttonText = "Start";
 
-	let defaultTime = !$hideHour ? "0:00:00" : "00:00";
+	$: defaultTime = $hideHour ? "00:00" : "0:00:00";
 
 	let timerCountInMs = 0;
-	let currentTimerCount = defaultTime;
-	let currentLapCount = defaultTime;
+	$: currentTimerCount = defaultTime;
+	$: currentLapCount = defaultTime;
+
+	let hasHours = false;
 
 	const startTimer = () => {
 		if (timer.status === "running") {
@@ -55,6 +57,9 @@
 
 	function timeAdapter(ms) {
 		let hours = Math.floor(ms / 3600000);
+		if (hours > 0) {
+			hasHours = true;
+		}
 
 		let minutesMs = Math.floor(ms - 3600000 * hours);
 		let minutes = Math.floor(minutesMs / 60000);
@@ -65,7 +70,8 @@
 				hours +
 				":" +
 				(parseInt(seconds) === 60
-					? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+					? (minutes + 1 < 10 ? "0" + (minutes + 1) : "" + (minutes + 1)) +
+					  ":00"
 					: (minutes < 10 ? "0" : "") +
 					  minutes +
 					  ":" +
@@ -74,7 +80,7 @@
 			);
 		} else {
 			return parseInt(seconds) === 60
-				? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+				? (minutes + 1 < 10 ? "0" + (minutes + 1) : "" + (minutes + 1)) + ":00"
 				: (minutes < 10 ? "0" : "") +
 						minutes +
 						":" +
@@ -129,7 +135,7 @@
 		<p>Total</p>
 
 		<h1
-			class:smaller-time={!$hideHour}
+			class:smaller-time={!$hideHour || hasHours}
 			class:blink={paused}
 			class="timer-number"
 		>
@@ -235,7 +241,7 @@
 
 <svelte:head>
 	<title>
-		{!stopped
+		{(!stopped && $currentView === "stop") || (!stopped && !$pomodoroState)
 			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
 			: "TIMESETS"}
 	</title>

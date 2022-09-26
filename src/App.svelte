@@ -21,33 +21,19 @@
         <h1>TIMESETS</h1>
         <div class="action-controls-container">
           <Button
+            running={$pomodoroState}
             buttonTitle="Pomodoro mode"
             buttonFunction={() => {
-              if ($stopwatchState) {
-                if (
-                  window.confirm("Currently running timers will be stopped")
-                ) {
-                  $currentView = "pomo";
-                }
-              } else {
-                $currentView = "pomo";
-              }
+              $currentView = "pomo";
             }}
             selected={$currentView === "pomo"}
             ><span slot="label">POMODORO</span>
           </Button>
           <Button
+            running={$stopwatchState}
             buttonTitle="Stopwatch mode"
             buttonFunction={() => {
-              if ($pomodoroState) {
-                if (
-                  window.confirm("Currently running timers will be stopped")
-                ) {
-                  $currentView = "stop";
-                }
-              } else {
-                $currentView = "stop";
-              }
+              $currentView = "stop";
             }}
             selected={$currentView === "stop"}
             ><span slot="label">STOPWATCH</span></Button
@@ -55,15 +41,7 @@
           <Button
             buttonTitle="Settings"
             buttonFunction={() => {
-              if ($pomodoroState || $stopwatchState) {
-                if (
-                  window.confirm("Currently running timers will be stopped")
-                ) {
-                  $currentView = "settings";
-                }
-              } else {
-                $currentView = "settings";
-              }
+              $currentView = "settings";
             }}
             selected={$currentView === "settings"}
             withIcon
@@ -88,11 +66,20 @@
           </Button>
         </div>
       </div>
-      {#if $currentView === "pomo"}
+
+      <div class:hide={$currentView !== "pomo"}>
+        <Pomodoro />
+      </div>
+
+      <div class:hide={$currentView !== "stop"}>
+        <Stopwatch />
+      </div>
+
+      <!-- {#if $currentView === "pomo"}
         <Pomodoro />
       {:else if $currentView === "stop"}
         <Stopwatch />
-      {/if}
+      {/if} -->
     </div>
   </div>
 
@@ -112,6 +99,10 @@
 </svelte:head>
 
 <style>
+  .hide {
+    display: none;
+  }
+
   main {
     display: flex;
     flex-direction: column;

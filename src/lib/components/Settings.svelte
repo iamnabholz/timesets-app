@@ -1,6 +1,6 @@
 <script>
   import { theme, hideHour } from "../stores/settings.js";
-  import { resetTimers } from "../stores/timers.js";
+  import { resetTimers, pomodoroState } from "../stores/timers.js";
   import { showNotification, playSound } from "../utils/notifications.js";
 
   import Button from "../Button.svelte";
@@ -162,6 +162,7 @@
       <h2>Reset timers:</h2>
 
       <Button
+        disable={$pomodoroState}
         buttonTitle="Reset Pomodoro timers to default"
         buttonFunction={resetTimers}><span slot="label">Reset</span></Button
       >
@@ -191,12 +192,12 @@
       <Switch
         isOn={!$hideHour}
         switchOn={() => {
-          $hideHour = false;
           localStorage.setItem("hideHour", "false");
+          $hideHour = false;
         }}
         switchOff={() => {
-          $hideHour = true;
           localStorage.setItem("hideHour", "true");
+          $hideHour = true;
         }}
       />
     </div>
@@ -225,10 +226,6 @@
     </p>
   </div>
 </div>
-
-<svelte:head>
-  <title>TIMESETS</title>
-</svelte:head>
 
 <style>
   .settings-column {

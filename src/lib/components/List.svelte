@@ -10,7 +10,7 @@
 	export let pomodoroList;
 
 	onDestroy(() => {
-		$laps = [];
+		//$laps = [];
 	});
 
 	$: timeMap = $timers.map((index) => index.time);

@@ -9,6 +9,8 @@
 
 	export let smaller = false;
 
+	export let running = false;
+
 	export let buttonFunction = (value) => {
 		console.log("Button clicked");
 	};
@@ -19,6 +21,7 @@
 	class:selected
 	class:destructive
 	class:smaller
+	class:running
 	class="button-container"
 	on:click={buttonFunction}
 	disabled={disable}
@@ -40,7 +43,7 @@
 	{/if}
 
 	{#if !noText}
-		{#if (!disable && !noText) || (!disable && withIcon)}
+		{#if !(disable && withIcon)}
 			<p><slot name="label">Button</slot></p>
 		{/if}
 	{/if}
@@ -48,6 +51,7 @@
 
 <style>
 	.button-container {
+		position: relative;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -113,5 +117,28 @@
 
 	p {
 		font-size: 16px;
+	}
+
+	.running::before {
+		content: "";
+		position: absolute;
+		background-color: currentColor;
+		bottom: 7px;
+		width: 4px;
+		height: 4px;
+		border-radius: 50%;
+		animation: move 1s ease infinite;
+	}
+
+	@keyframes move {
+		0% {
+			transform: translateX(-6px);
+		}
+		50% {
+			transform: translateX(6px);
+		}
+		100% {
+			transform: translateX(-6px);
+		}
 	}
 </style>

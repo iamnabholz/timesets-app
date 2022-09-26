@@ -1,6 +1,7 @@
 <script>
 	import { onDestroy } from "svelte";
 	import { showNotification, playSound } from "../utils/notifications.js";
+	import { currentView } from "../stores/settings";
 	import Button from "../Button.svelte";
 
 	import Timer from "tiny-timer";
@@ -10,6 +11,7 @@
 		pomodoroState,
 		runningTimerId,
 		pomodoroPaused,
+		stopwatchState,
 	} from "../stores/timers.js";
 
 	const timer = new Timer();
@@ -69,7 +71,7 @@
 		let minutes = Math.floor(ms / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
 		return parseInt(seconds) === 60
-			? (minutes + 1 < 10 ? "0" : "" + minutes) + ":00"
+			? (minutes + 1 < 10 ? "0" + (minutes + 1) : "" + (minutes + 1)) + ":00"
 			: (minutes < 10 ? "0" : "") +
 					minutes +
 					":" +
@@ -221,7 +223,8 @@
 
 <svelte:head>
 	<title>
-		{$pomodoroState && !done
+		{($pomodoroState && !done && $currentView === "pomo") ||
+		($pomodoroState && !done && !$stopwatchState)
 			? (!paused ? "Running" : "Paused") + " - " + currentTimerCount
 			: "TIMESETS"}
 	</title>

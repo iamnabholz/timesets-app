@@ -16,7 +16,7 @@
 	export let completed;
 
 	let newName = name;
-	let newTime = time;
+	let newTime = time < 10 ? "0" + time : time;
 
 	$: if ($pomodoroState === false) {
 		completed = false;
