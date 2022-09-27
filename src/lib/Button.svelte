@@ -9,6 +9,8 @@
 
 	export let smaller = false;
 
+	export let grows = false;
+
 	export let running = false;
 
 	export let buttonFunction = (value) => {
@@ -22,6 +24,7 @@
 	class:destructive
 	class:smaller
 	class:running
+	class:grows
 	class="button-container"
 	on:click={buttonFunction}
 	disabled={disable}
@@ -113,6 +116,10 @@
 
 	.smaller {
 		padding: 6px 9px;
+	}
+
+	.grows {
+		flex-grow: 2;
 	}
 
 	p {

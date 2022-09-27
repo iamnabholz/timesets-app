@@ -12,15 +12,25 @@
   $: if ($currentView !== "settings") {
     localStorage.setItem("view", $currentView);
   }
+
+  let currentScroll = 0;
 </script>
 
 <main style="--accent-color: {$theme}">
   <div class="top-section" style="z-index: 1;">
     <div class="section-container">
       <div class="section-header">
-        <h1>TIMESETS</h1>
+        <div class="name-container" class:hide-title={currentScroll > 0}>
+          <img
+            style="max-height: 22px; filter: drop-shadow(0 1px 6px rgba(50, 50, 50, 0.5));"
+            alt="Timesets logo"
+            src="/img/timesets-logo.png"
+          />
+          <h1>TIMESETS</h1>
+        </div>
         <div class="action-controls-container">
           <Button
+            grows
             running={$pomodoroState}
             buttonTitle="Pomodoro mode"
             buttonFunction={() => {
@@ -30,6 +40,7 @@
             ><span slot="label">POMODORO</span>
           </Button>
           <Button
+            grows
             running={$stopwatchState}
             buttonTitle="Stopwatch mode"
             buttonFunction={() => {
@@ -98,9 +109,18 @@
   <meta name="theme-color" content={$theme} />
 </svelte:head>
 
+<svelte:window bind:scrollY={currentScroll} />
+
 <style>
   .hide {
     display: none;
+  }
+
+  .name-container {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    column-gap: 12px;
   }
 
   main {
@@ -153,12 +173,10 @@
   .section-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
   }
 
   .action-controls-container {
     display: flex;
-    align-self: flex-start;
     column-gap: 4px;
   }
 
@@ -169,8 +187,11 @@
   @media only screen and (max-width: 600px) {
     .section-header {
       flex-direction: column;
-      align-self: center;
       row-gap: 12px;
+    }
+
+    .hide-title {
+      display: none;
     }
   }
 </style>

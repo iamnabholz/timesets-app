@@ -204,7 +204,13 @@
   </div>
 
   <div class="information">
-    <p>
+    <img
+      style="max-height: 46px; filter: drop-shadow(0 1px 6px rgba(50, 50, 50, 0.5));"
+      alt="Timesets logo"
+      src="/img/timesets-logo.png"
+    />
+
+    <p style="padding-bottom: 14px;">
       Timesets v {appVersion}
     </p>
     <a href="https://www.buymeacoffee.com/nabholz" target="_blank"
