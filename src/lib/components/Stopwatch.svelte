@@ -1,6 +1,4 @@
 <script>
-	import { onDestroy } from "svelte";
-
 	import Timer from "tiny-timer";
 	import { stopwatchState, laps, pomodoroState } from "../stores/timers.js";
 	import { hideHour, currentView } from "../stores/settings.js";
@@ -9,10 +7,6 @@
 	import Button from "../Button.svelte";
 
 	const timer = new Timer({ stopwatch: true });
-
-	onDestroy(() => {
-		stopTimer();
-	});
 
 	let currentDelay = 0;
 
@@ -41,6 +35,7 @@
 	};
 
 	const stopTimer = () => {
+		hasHours = false;
 		currentDelay = 0;
 		timer.stop();
 		$stopwatchState = false;
@@ -65,7 +60,7 @@
 		let minutes = Math.floor(minutesMs / 60000);
 		let seconds = ((ms % 60000) / 1000).toFixed(0);
 
-		if (!$hideHour || hours > 0) {
+		if (!$hideHour || hasHours) {
 			return (
 				hours +
 				":" +
@@ -147,7 +142,7 @@
 		<p>Lap</p>
 
 		<h1
-			class:smaller-time={!$hideHour}
+			class:smaller-time={!$hideHour || hasHours}
 			class:blink={paused}
 			class="timer-number"
 		>

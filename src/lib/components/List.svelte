@@ -1,6 +1,5 @@
 <script>
 	import { slide } from "svelte/transition";
-	import { onDestroy } from "svelte";
 
 	import { timers, laps } from "../stores/timers.js";
 
@@ -8,10 +7,6 @@
 	import Lap from "./Lap.svelte";
 
 	export let pomodoroList;
-
-	onDestroy(() => {
-		//$laps = [];
-	});
 
 	$: timeMap = $timers.map((index) => index.time);
 	$: getTime(timeMap);
