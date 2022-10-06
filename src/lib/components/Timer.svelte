@@ -224,6 +224,15 @@
 
 	input[type="number"] {
 		width: 3rem;
+		-moz-appearance: textfield;
+	}
+
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		-webkit-appearance: none;
+		-moz-appearance: none;
+		appearance: none;
+		margin: 0;
 	}
 
 	input[type="number"]::first-line {
