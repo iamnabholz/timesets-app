@@ -126,6 +126,7 @@
 				max="60"
 				min="1"
 				placeholder="00"
+				style="-moz-appearance: textfield;"
 			/>
 			<p class:completed class="time-text">:00</p>
 		</span>
@@ -224,15 +225,6 @@
 
 	input[type="number"] {
 		width: 3rem;
-		-moz-appearance: textfield;
-	}
-
-	input::-webkit-outer-spin-button,
-	input::-webkit-inner-spin-button {
-		-webkit-appearance: none;
-		-moz-appearance: none;
-		appearance: none;
-		margin: 0;
 	}
 
 	input[type="number"]::first-line {
