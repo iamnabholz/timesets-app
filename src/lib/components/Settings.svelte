@@ -16,7 +16,7 @@
 
   let waitForStart = JSON.parse(localStorage.getItem("waitForStart")) || false;
 
-  let appVersion = "1.0";
+  let appVersion = "1.1.0";
 
   const themeOptions = {
     Green: "#69A98B",
@@ -210,9 +210,16 @@
       src="/img/timesets-logo.png"
     />
 
-    <p style="padding-bottom: 14px;">
-      Timesets v {appVersion}
+    <p style="padding: 14px 0 18px 0;">
+      Timesets v {appVersion} -
+      <a
+        rel="noreferrer"
+        target="_blank"
+        href="https://github.com/iamnabholz/timesets-app/releases"
+        >Release notes &#8599;
+      </a>
     </p>
+
     <a href="https://www.buymeacoffee.com/nabholz" target="_blank"
       ><img
         src="/img/bmac-button.png"

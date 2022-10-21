@@ -1,5 +1,5 @@
 <script>
-	import { fly } from "svelte/transition";
+	import { fly, slide } from "svelte/transition";
 
 	import {
 		timers,
@@ -69,6 +69,9 @@
 			newTime = parseInt(text);
 		}
 	};
+
+	export let start = (value, id) => {};
+	export let end = (value) => {};
 </script>
 
 <div
@@ -76,6 +79,32 @@
 	class="timer-container"
 >
 	<div class="left-side">
+		{#if !$pomodoroState}
+			<div
+				id="sort-icon"
+				class="sort-icon"
+				draggable="true"
+				on:dragstart={(event) => {
+					start(event, id);
+				}}
+				on:dragend={end}
+			>
+				<svg
+					clip-rule="evenodd"
+					fill-rule="evenodd"
+					stroke-linejoin="round"
+					stroke-miterlimit="2"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					xmlns="http://www.w3.org/2000/svg"
+					><path
+						d="m21 17.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z"
+						fill-rule="nonzero"
+					/></svg
+				>
+			</div>
+		{/if}
+
 		<input
 			class:completed
 			bind:value={newName}
@@ -173,6 +202,23 @@
 		max-width: 100%;
 		--indicator-size: 22px;
 		--indicator-border: 4px;
+	}
+
+	.left-side {
+		display: flex;
+		align-items: center;
+		column-gap: 4px;
+	}
+
+	.sort-icon {
+		cursor: pointer;
+		padding: 5px;
+		width: 40px;
+		height: 40px;
+		color: var(--text-color);
+		opacity: 0.4;
+		display: flex;
+		justify-content: center;
 	}
 
 	.left-side .completed {

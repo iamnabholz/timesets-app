@@ -11,20 +11,23 @@
 @font-face {
   font-family: 'Syne';
   font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/Syne-Medium.woff2') format('woff2'),
-    url('/fonts/Syne-Medium.woff') format('woff');
+  font-weight: 600;
+  src: url('/fonts/Syne-SemiBold.woff2') format('woff2'),
+    url('/fonts/Syne-SemiBold.woff') format('woff');
 }
 
 :root {
   --accent-color: #CB2A37;
   --separator-color: rgba(255, 255, 255, 0.08);
   --grey-color: #808080;
+  --text-color: #fff;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --separator-color: rgba(0, 0, 0, 0.2);
+
+    --text-color: #000;
   }
 }
 
@@ -133,7 +136,7 @@ input[type=number] {
 }
 
 input {
-  color: #fff;
+  color: var(--text-color);
   background-color: #1D1D1D;
   padding: 0;
   text-decoration: none;
@@ -167,7 +170,6 @@ input:read-only {
 
 @media (prefers-color-scheme: light) {
   input {
-    color: #000;
     background-color: #c5c5c5;
   }
 

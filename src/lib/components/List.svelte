@@ -1,12 +1,17 @@
 <script>
-	import { slide } from "svelte/transition";
+	import { crossfade, slide } from "svelte/transition";
+	import { flip } from "svelte/animate";
 
-	import { timers, laps } from "../stores/timers.js";
+	const [send, receive] = crossfade({});
+
+	import { timers, laps, draggingItem } from "../stores/timers.js";
 
 	import Timer from "./Timer.svelte";
 	import Lap from "./Lap.svelte";
 
 	export let pomodoroList;
+
+	$: items = $timers;
 
 	$: timeMap = $timers.map((index) => index.time);
 	$: getTime(timeMap);
@@ -27,6 +32,42 @@
 			totalMinutes = rminutes;
 		}
 	}
+
+	let dragging = false;
+	let draggingIndex;
+	let draggingOverIndex;
+
+	const start = (ev, timerId) => {
+		draggingOverIndex = null;
+		ev.dataTransfer.setData("source", ev.target.dataset.index);
+
+		draggingIndex = items.findIndex((state) => state.id === timerId);
+
+		draggingItem.set(items[draggingIndex]);
+		dragging = true;
+	};
+
+	const over = (ev, index) => {
+		ev.preventDefault();
+
+		draggingOverIndex = index;
+	};
+
+	const drop = (ev, index) => {
+		ev.preventDefault();
+
+		timers.sort(draggingIndex, index);
+		dragging = false;
+		draggingItem.set();
+
+		draggingIndex = null;
+	};
+
+	const end = (ev) => {
+		dragging = false;
+		draggingItem.set();
+		draggingIndex = null;
+	};
 </script>
 
 {#if pomodoroList}
@@ -56,9 +97,30 @@
 				</p>
 			</div>
 
-			{#each $timers as timer (timer.id)}
-				<div class="list-item" transition:slide|local>
-					<Timer {...timer} />
+			{#each items as timer, index (timer.id)}
+				<div
+					class:dragging={dragging && draggingIndex === index}
+					class:hovering={dragging &&
+						draggingIndex !== index &&
+						draggingOverIndex === index}
+					class="list-item"
+					data-index={index}
+					on:drop={(ev) => {
+						drop(ev, index);
+					}}
+					on:dragover={(ev) => {
+						over(ev, index);
+					}}
+					on:dragexit={(ev) => {
+						draggingOverIndex = null;
+					}}
+					in:receive|local={{ key: timer.id }}
+					out:send|local={{ key: timer.id }}
+					animate:flip={{
+						duration: (d) => Math.sqrt(d * 360),
+					}}
+				>
+					<Timer {...timer} {start} {end} />
 				</div>
 			{/each}
 		</div>
@@ -100,6 +162,24 @@
 
 	.list-item {
 		border-top: 1px solid var(--separator-color);
+		position: relative;
+		transition: 0.15s linear;
+	}
+
+	.dragging {
+		opacity: 0.4;
+	}
+
+	.hovering::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 4px;
+		border: 2px dotted var(--accent-color);
+		transition: 0.15s linear;
 	}
 
 	.empty-list {

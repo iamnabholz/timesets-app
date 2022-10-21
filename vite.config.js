@@ -7,15 +7,14 @@ export default defineConfig({
   plugins: [
     svelte(),
 
-    VitePWA({ 
-      injectRegister: 'inline',
+    VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['assets/*.*.js', 'assets/*.*.css', 'favicon.ico', 'fonts/*.woff', 'fonts/*.woff2', 'icons/*.png', 'img/*.png',  'sounds/*.wav'],
+      includeAssets: ['assets/*.*.js', 'assets/*.*.css', 'favicon.ico', 'fonts/*.woff', 'fonts/*.woff2', 'icons/*.png', 'img/*.png', 'sounds/*.wav'],
       manifest: {
         "name": "Timesets",
         "short_name": "Timesets",
-        "theme_color": "#0a0a0a",
-        "background_color": "#0a0a0a",
+        "theme_color": "#E5A441",
+        "background_color": "#E5A441",
         "display": "standalone",
         "scope": "/",
         "start_url": "/index.html",

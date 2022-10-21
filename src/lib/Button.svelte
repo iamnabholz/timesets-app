@@ -12,6 +12,7 @@
 	export let grows = false;
 
 	export let running = false;
+	export let paused = false;
 
 	export let buttonFunction = (value) => {
 		console.log("Button clicked");
@@ -26,6 +27,7 @@
 	class:running
 	class:grows
 	class="button-container"
+	style="animation-play-state: {paused ? 'paused' : 'running'};"
 	on:click={buttonFunction}
 	disabled={disable}
 >
@@ -135,6 +137,7 @@
 		height: 4px;
 		border-radius: 50%;
 		animation: move 1s ease infinite;
+		animation-play-state: inherit;
 	}
 
 	@keyframes move {

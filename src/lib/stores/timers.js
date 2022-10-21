@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 
-const defaultPomodoros  = [{
+const defaultPomodoros = [{
     id: 2,
     name: "Work Review",
     time: 15,
@@ -32,81 +32,108 @@ const defaultPomodoros  = [{
 }]
 
 const defaultEntry = () => {
-  return {
-    id: Date.now(),
-    name: 'New task',
-    time: 10,
-    completed: false
-  };
+    return {
+        id: Date.now(),
+        name: 'New task',
+        time: 10,
+        completed: false
+    };
 }
 
 export const newEntry = () => {
-  timers.modify(defaultEntry());
+    timers.modify(defaultEntry());
 }
 
 function timerStore() {
-  const state = JSON.parse(localStorage.getItem("timers")) || defaultPomodoros;
-  const {
-      subscribe,
-      set,
-      update
-  } = writable(state);
+    const state = JSON.parse(localStorage.getItem("timers")) || defaultPomodoros;
+    const {
+        subscribe,
+        set,
+        update
+    } = writable(state);
 
-  const timers = {
-      modify(data) {
-          update(state => {
-              let index = state.findIndex(state => state.id == data.id);
+    const timers = {
+        sort(dragId, dropId) {
+            update(state => {
+                let oldIndex = dragId;
 
-              if (state[index] == null) {
-                  state = [data].concat(state);
-              } else {
-                  state[index] = data;
-              }
-              localStorage.setItem("timers", JSON.stringify(state));
+                let newIndex = dropId;
 
-              return state;
-          });
-      },
-      delete(id) {
-          update(state => {
-              state = state.filter(state => state.id != id);
-              localStorage.setItem("timers", JSON.stringify(state));
+                /*while (oldIndex < 0) {
+                    oldIndex += state.length;
+                }
+                while (newIndex < 0) {
+                    newIndex += state.length;
+                }
+                if (newIndex >= state.length) {
+                    var k = newIndex - state.length;
+                    while ((k--) + 1) {
+                        state.push(undefined);
+                    }
+                }*/
+                state.splice(newIndex, 0, state.splice(oldIndex, 1)[0]);
 
-              return state;
-          });
-      },
-      reset() {
-          update(state => {
-              state = defaultPomodoros;
-              localStorage.setItem("timers", JSON.stringify(state));
+                localStorage.setItem("timers", JSON.stringify(state));
 
-              return state;
-          });
-      }
-  }
+                return state;
+            });
+        },
+        modify(data) {
+            update(state => {
+                let index = state.findIndex(state => state.id == data.id);
 
-  return {
-      subscribe,
-      set,
-      update,
-      ...timers
-  };
+                if (state[index] == null) {
+                    state = [data].concat(state);
+                } else {
+                    state[index] = data;
+                }
+                localStorage.setItem("timers", JSON.stringify(state));
+
+                return state;
+            });
+        },
+        delete(id) {
+            update(state => {
+                state = state.filter(state => state.id != id);
+                localStorage.setItem("timers", JSON.stringify(state));
+
+                return state;
+            });
+        },
+        reset() {
+            update(state => {
+                state = defaultPomodoros;
+                localStorage.setItem("timers", JSON.stringify(state));
+
+                return state;
+            });
+        }
+    }
+
+    return {
+        subscribe,
+        set,
+        update,
+        ...timers
+    };
 }
 
 export const timers = timerStore();
 
 export const resetTimers = () => {
-    if(window.confirm("Do you really want to reset your timers?"))
-    {
+    if (window.confirm("Do you really want to reset your timers?")) {
         timers.reset();
     }
 }
+
+export const draggingItem = writable();
 
 export const pomodoroState = writable(false);
 export const runningTimerId = writable(0);
 export const pomodoroPaused = writable(false);
 
 export const stopwatchState = writable(false);
+export const stopwatchPaused = writable(false);
 
 function lapStore() {
     const state = [];
@@ -115,19 +142,19 @@ function lapStore() {
         set,
         update
     } = writable(state);
-  
+
     const timers = {
         modify(data) {
             update(state => {
                 let index = state.findIndex(state => state.id == data.id);
-  
+
                 if (state[index] == null) {
                     state = [data].concat(state);
                 } else {
                     state[index] = data;
                 }
                 //localStorage.setItem("tim", JSON.stringify(state));
-  
+
                 return state;
             });
         },
@@ -135,7 +162,7 @@ function lapStore() {
             update(state => {
                 state = state.filter(state => state.id != id);
                 //localStorage.setItem("tim", JSON.stringify(state));
-  
+
                 return state;
             });
         },
@@ -143,18 +170,18 @@ function lapStore() {
             update(state => {
                 state = [];
                 //localStorage.setItem("tim", JSON.stringify(state));
-  
+
                 return state;
             });
         }
     }
-  
+
     return {
         subscribe,
         set,
         update,
         ...timers
     };
-  }
+}
 
 export const laps = lapStore();
