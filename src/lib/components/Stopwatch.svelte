@@ -1,6 +1,11 @@
 <script>
 	import Timer from "tiny-timer";
-	import { stopwatchState, laps, pomodoroState } from "../stores/timers.js";
+	import {
+		stopwatchState,
+		laps,
+		pomodoroState,
+		stopwatchPaused,
+	} from "../stores/timers.js";
 	import { hideHour, currentView } from "../stores/settings.js";
 	import { showNotification, playSound } from "../utils/notifications.js";
 
@@ -13,6 +18,8 @@
 	let stopped = true;
 	let paused = false;
 	let buttonText = "Start";
+
+	$: $stopwatchPaused = paused;
 
 	$: defaultTime = $hideHour ? "00:00" : "0:00:00";
 

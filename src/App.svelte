@@ -1,6 +1,11 @@
 <script>
   import { theme, currentView } from "./lib/stores/settings.js";
-  import { pomodoroState, stopwatchState } from "./lib/stores/timers.js";
+  import {
+    pomodoroState,
+    stopwatchState,
+    pomodoroPaused,
+    stopwatchPaused,
+  } from "./lib/stores/timers.js";
 
   import Pomodoro from "./lib/components/Pomodoro.svelte";
   import Stopwatch from "./lib/components/Stopwatch.svelte";
@@ -8,19 +13,26 @@
 
   import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
+  import { onDestroy } from "svelte";
 
   $: if ($currentView !== "settings") {
     localStorage.setItem("view", $currentView);
   }
 
-  let currentScroll = 0;
+  const unsubscribe = theme.subscribe((value) => {
+    document.documentElement.style.setProperty("--accent-color", value);
+  });
+
+  onDestroy(() => {
+    unsubscribe();
+  });
 </script>
 
-<main style="--accent-color: {$theme}">
+<main>
   <div class="top-section" style="z-index: 1;">
     <div class="section-container">
       <div class="section-header">
-        <div class="name-container" class:hide-title={currentScroll > 0}>
+        <div class="name-container">
           <img
             style="max-height: 22px; filter: drop-shadow(0 1px 6px rgba(50, 50, 50, 0.5));"
             alt="Timesets logo"
@@ -32,6 +44,7 @@
           <Button
             grows
             running={$pomodoroState}
+            paused={$pomodoroState && $pomodoroPaused}
             buttonTitle="Pomodoro mode"
             buttonFunction={() => {
               $currentView = "pomo";
@@ -42,6 +55,7 @@
           <Button
             grows
             running={$stopwatchState}
+            paused={$stopwatchState && $stopwatchPaused}
             buttonTitle="Stopwatch mode"
             buttonFunction={() => {
               $currentView = "stop";
@@ -109,8 +123,6 @@
   <meta name="theme-color" content={$theme} />
 </svelte:head>
 
-<svelte:window bind:scrollY={currentScroll} />
-
 <style>
   .hide {
     display: none;
@@ -150,9 +162,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #fff;
-    background-color: #0a0a0a;
+    color: var(--text-color);
+    background-color: var(--background-color);
     flex-grow: 2;
+    position: relative;
+  }
+
+  .bottom-section::before {
+    content: "";
+    position: fixed;
+    background-color: var(--background-color);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -5;
   }
 
   .settings {
@@ -160,11 +183,6 @@
   }
 
   @media (prefers-color-scheme: light) {
-    .bottom-section {
-      background-color: #dfdfdf;
-      color: #0a0a0a;
-    }
-
     .settings {
       background-color: var(--accent-color);
     }
@@ -190,7 +208,7 @@
       row-gap: 12px;
     }
 
-    .hide-title {
+    .name-container {
       display: none;
     }
   }

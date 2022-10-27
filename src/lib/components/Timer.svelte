@@ -1,5 +1,5 @@
 <script>
-	import { fly } from "svelte/transition";
+	import { fly, slide } from "svelte/transition";
 
 	import {
 		timers,
@@ -69,13 +69,61 @@
 			newTime = parseInt(text);
 		}
 	};
+
+	export let start = (value, id) => {};
+	export let end = (value) => {};
+
+	let holdingSortHandle = false;
 </script>
 
 <div
 	class:blink={$runningTimerId === id && $pomodoroPaused}
 	class="timer-container"
+	draggable={holdingSortHandle}
+	on:dragstart={(event) => {
+		start(event, id);
+	}}
+	on:dragend={(event) => {
+		holdingSortHandle = false;
+		end(event);
+	}}
 >
 	<div class="left-side">
+		{#if !$pomodoroState}
+			<div
+				id="sort-icon"
+				class="sort-icon"
+				on:touchstart={() => {
+					holdingSortHandle = true;
+				}}
+				on:touchend={() => {
+					holdingSortHandle = false;
+				}}
+				on:mousedown={() => {
+					holdingSortHandle = true;
+				}}
+				on:mouseup={() => {
+					holdingSortHandle = false;
+				}}
+			>
+				<svg
+					height="24"
+					width="24"
+					clip-rule="evenodd"
+					fill-rule="evenodd"
+					stroke-linejoin="round"
+					stroke-miterlimit="2"
+					viewBox="0 0 24 24"
+					fill="currentColor"
+					xmlns="http://www.w3.org/2000/svg"
+					><path
+						d="m21 17.75c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75zm0-4c0-.414-.336-.75-.75-.75h-16.5c-.414 0-.75.336-.75.75s.336.75.75.75h16.5c.414 0 .75-.336.75-.75z"
+						fill-rule="nonzero"
+					/></svg
+				>
+			</div>
+		{/if}
+
 		<input
 			class:completed
 			bind:value={newName}
@@ -103,9 +151,7 @@
 						/></svg
 					>
 				</div>
-			{/if}
-
-			{#if $runningTimerId === id && !completed}
+			{:else if $runningTimerId === id}
 				<div
 					style="animation-play-state: {$pomodoroPaused
 						? 'paused'
@@ -175,6 +221,19 @@
 		--indicator-border: 4px;
 	}
 
+	.left-side {
+		display: flex;
+		align-items: center;
+		column-gap: 4px;
+	}
+
+	.sort-icon {
+		cursor: pointer;
+		color: var(--text-color);
+		opacity: 0.4;
+		padding: 8px 4px;
+	}
+
 	.left-side .completed {
 		text-decoration: line-through;
 	}
@@ -206,6 +265,7 @@
 
 	.completed-indicator {
 		margin: auto;
+		color: white;
 		background-color: var(--accent-color);
 		border-radius: 50%;
 		height: var(--indicator-size);

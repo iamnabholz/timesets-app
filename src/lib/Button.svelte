@@ -12,6 +12,7 @@
 	export let grows = false;
 
 	export let running = false;
+	export let paused = false;
 
 	export let buttonFunction = (value) => {
 		console.log("Button clicked");
@@ -26,6 +27,7 @@
 	class:running
 	class:grows
 	class="button-container"
+	style="animation-play-state: {paused ? 'paused' : 'running'};"
 	on:click={buttonFunction}
 	disabled={disable}
 >
@@ -58,21 +60,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		column-gap: 12px;
-		padding: 12px 18px;
+		column-gap: 8px;
+		padding: 10px 14px;
 		background-color: transparent;
 		color: #000;
 		border: 2px solid #000;
 		border-radius: 100px;
 		cursor: pointer;
 		transition: 100ms ease;
-	}
-
-	@media only screen and (max-width: 600px) {
-		.button-container {
-			column-gap: 8px;
-			padding: 10px 14px;
-		}
 	}
 
 	.button-container:hover {
@@ -115,7 +110,7 @@
 	}
 
 	.smaller {
-		padding: 6px 9px;
+		padding: 5px 9px;
 	}
 
 	.grows {
@@ -135,6 +130,7 @@
 		height: 4px;
 		border-radius: 50%;
 		animation: move 1s ease infinite;
+		animation-play-state: inherit;
 	}
 
 	@keyframes move {

@@ -11,20 +11,25 @@
 @font-face {
   font-family: 'Syne';
   font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/Syne-Medium.woff2') format('woff2'),
-    url('/fonts/Syne-Medium.woff') format('woff');
+  font-weight: 600;
+  src: url('/fonts/Syne-SemiBold.woff2') format('woff2'),
+    url('/fonts/Syne-SemiBold.woff') format('woff');
 }
 
 :root {
   --accent-color: #CB2A37;
   --separator-color: rgba(255, 255, 255, 0.08);
   --grey-color: #808080;
+  --text-color: #fff;
+
+  --background-color: #0a0a0a;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --separator-color: rgba(0, 0, 0, 0.2);
+    --text-color: #000;
+    --background-color: #dfdfdf;
   }
 }
 
@@ -32,6 +37,11 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 html,
@@ -76,6 +86,22 @@ pre {
   width: 10px;
 }
 
+::-webkit-scrollbar-track {
+  background-color: var(--grey-color);
+  opacity: 0.4;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--background-color);
+  opacity: 0.6;
+  transition: .15s linear;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  opacity: 0.8;
+}
+
 table {
   border-spacing: 0;
   border-collapse: collapse;
@@ -92,11 +118,7 @@ img {
 }
 
 body {
-  background-color: #0a0a0a;
-}
-
-svg {
-  display: flex;
+  background-color: var(--accent-color);
 }
 
 button {
@@ -133,7 +155,7 @@ input[type=number] {
 }
 
 input {
-  color: #fff;
+  color: var(--text-color);
   background-color: #1D1D1D;
   padding: 0;
   text-decoration: none;
@@ -167,12 +189,7 @@ input:read-only {
 
 @media (prefers-color-scheme: light) {
   input {
-    color: #000;
     background-color: #c5c5c5;
-  }
-
-  body {
-    background-color: #fff;
   }
 }
 
