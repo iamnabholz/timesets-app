@@ -21,13 +21,15 @@
   --separator-color: rgba(255, 255, 255, 0.08);
   --grey-color: #808080;
   --text-color: #fff;
+
+  --background-color: #0a0a0a;
 }
 
 @media (prefers-color-scheme: light) {
   :root {
     --separator-color: rgba(0, 0, 0, 0.2);
-
     --text-color: #000;
+    --background-color: #dfdfdf;
   }
 }
 
@@ -35,6 +37,11 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  outline: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
 html,
@@ -79,6 +86,22 @@ pre {
   width: 10px;
 }
 
+::-webkit-scrollbar-track {
+  background-color: var(--grey-color);
+  opacity: 0.4;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--background-color);
+  opacity: 0.6;
+  transition: .15s linear;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active {
+  opacity: 0.8;
+}
+
 table {
   border-spacing: 0;
   border-collapse: collapse;
@@ -95,11 +118,7 @@ img {
 }
 
 body {
-  background-color: #0a0a0a;
-}
-
-svg {
-  display: flex;
+  background-color: var(--accent-color);
 }
 
 button {
@@ -171,10 +190,6 @@ input:read-only {
 @media (prefers-color-scheme: light) {
   input {
     background-color: #c5c5c5;
-  }
-
-  body {
-    background-color: #fff;
   }
 }
 

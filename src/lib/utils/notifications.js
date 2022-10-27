@@ -3,61 +3,52 @@ const lap = '/sounds/new-lap.wav';
 
 export function playSound(soundToPlay) {
 
-  if(soundToPlay === "done")
-  {
+  if (soundToPlay === "done") {
     const audio = new Audio(done);
-  
-    if(JSON.parse(localStorage.getItem("timerSound")) === true){
+
+    if (JSON.parse(localStorage.getItem("timerSound")) === true) {
       audio.play();
     }
-  } else if(soundToPlay === "lap") 
-  {
+  } else if (soundToPlay === "lap") {
     const audio = new Audio(lap);
-    
-    if(JSON.parse(localStorage.getItem("lapSound")) === true){
+
+    if (JSON.parse(localStorage.getItem("lapSound")) === true) {
       audio.play();
     }
   }
 }
 
-
-function isDenied() {
-  return (
-    Notification.permission === "denied" ||
-    Notification.permission === "default"
-  );
-}
-
 function show(title, body) {
-  if (JSON.parse(localStorage.getItem("notifications"))) {
-    var notification = new Notification(
-        title || "Notifications have been enabled", {
-            body: body || "Now you will be notified when a timer has finished",
-            icon: "/icons/icon-512.png",
-            silent: true
-        }
-    );
-    notification.onclick = function () {
-        window.focus();
-    };
-}
+  const notification = new Notification(
+    title || "Notifications are enabled", {
+    body: body || "Now you will be notified when a timer has finished",
+    icon: "/icons/icon-512.png",
+    silent: true
+  }
+  );
+  notification.onclick = () => {
+    window.focus();
+  };
 }
 
 export function showNotification(notificationTitle, notificationBody) {
-  if('Notification' in window)
-  {
-    if (isDenied()) {
-      Notification.requestPermission().then(function (permission) {
-        // If the user accepts, let's create a notification
-        if (permission === "granted") {
-          localStorage.setItem("notifications", "true");
-          show(notificationTitle, notificationBody);
-        } else {
-          localStorage.setItem("notifications", "false");
-        }
-      });
-    } else {
+  if (!("Notification" in window)) {
+    // Check if the browser supports notifications
+    console.log("This platform doesn't support the Notification API");
+  } else if (Notification.permission === "granted") {
+    if (localStorage.getItem("notitifications") === "true") {
       show(notificationTitle, notificationBody);
     }
+  }
+  else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        localStorage.setItem("notifications", "true");
+        show(notificationTitle, notificationBody);
+      } else {
+        localStorage.setItem("notifications", "false");
+      }
+    });
   }
 }

@@ -13,13 +13,22 @@
 
   import List from "./lib/components/List.svelte";
   import Button from "./lib/Button.svelte";
+  import { onDestroy } from "svelte";
 
   $: if ($currentView !== "settings") {
     localStorage.setItem("view", $currentView);
   }
+
+  const unsubscribe = theme.subscribe((value) => {
+    document.documentElement.style.setProperty("--accent-color", value);
+  });
+
+  onDestroy(() => {
+    unsubscribe();
+  });
 </script>
 
-<main style="--accent-color: {$theme}">
+<main>
   <div class="top-section" style="z-index: 1;">
     <div class="section-container">
       <div class="section-header">
@@ -153,9 +162,20 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #fff;
-    background-color: #0a0a0a;
+    color: var(--text-color);
+    background-color: var(--background-color);
     flex-grow: 2;
+    position: relative;
+  }
+
+  .bottom-section::before {
+    content: "";
+    position: fixed;
+    background-color: var(--background-color);
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -5;
   }
 
   .settings {
@@ -163,11 +183,6 @@
   }
 
   @media (prefers-color-scheme: light) {
-    .bottom-section {
-      background-color: #dfdfdf;
-      color: #0a0a0a;
-    }
-
     .settings {
       background-color: var(--accent-color);
     }

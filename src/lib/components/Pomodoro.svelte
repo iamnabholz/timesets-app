@@ -114,7 +114,7 @@
 
 				showNotification(
 					"'" + currentName + "' completed!",
-					"Check the app to start your next time."
+					"Check the app to start the next timer."
 				);
 			}
 			startTimer();

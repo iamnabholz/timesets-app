@@ -72,24 +72,43 @@
 
 	export let start = (value, id) => {};
 	export let end = (value) => {};
+
+	let holdingSortHandle = false;
 </script>
 
 <div
 	class:blink={$runningTimerId === id && $pomodoroPaused}
 	class="timer-container"
+	draggable={holdingSortHandle}
+	on:dragstart={(event) => {
+		start(event, id);
+	}}
+	on:dragend={(event) => {
+		holdingSortHandle = false;
+		end(event);
+	}}
 >
 	<div class="left-side">
 		{#if !$pomodoroState}
 			<div
 				id="sort-icon"
 				class="sort-icon"
-				draggable="true"
-				on:dragstart={(event) => {
-					start(event, id);
+				on:touchstart={() => {
+					holdingSortHandle = true;
 				}}
-				on:dragend={end}
+				on:touchend={() => {
+					holdingSortHandle = false;
+				}}
+				on:mousedown={() => {
+					holdingSortHandle = true;
+				}}
+				on:mouseup={() => {
+					holdingSortHandle = false;
+				}}
 			>
 				<svg
+					height="24"
+					width="24"
 					clip-rule="evenodd"
 					fill-rule="evenodd"
 					stroke-linejoin="round"
@@ -132,9 +151,7 @@
 						/></svg
 					>
 				</div>
-			{/if}
-
-			{#if $runningTimerId === id && !completed}
+			{:else if $runningTimerId === id}
 				<div
 					style="animation-play-state: {$pomodoroPaused
 						? 'paused'
@@ -212,13 +229,9 @@
 
 	.sort-icon {
 		cursor: pointer;
-		padding: 5px;
-		width: 40px;
-		height: 40px;
 		color: var(--text-color);
 		opacity: 0.4;
-		display: flex;
-		justify-content: center;
+		padding: 8px 4px;
 	}
 
 	.left-side .completed {
@@ -252,6 +265,7 @@
 
 	.completed-indicator {
 		margin: auto;
+		color: white;
 		background-color: var(--accent-color);
 		border-radius: 50%;
 		height: var(--indicator-size);

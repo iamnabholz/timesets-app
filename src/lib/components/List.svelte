@@ -1,5 +1,6 @@
 <script>
 	import { crossfade, slide } from "svelte/transition";
+	import { quintOut } from "svelte/easing";
 	import { flip } from "svelte/animate";
 
 	const [send, receive] = crossfade({});
@@ -8,6 +9,7 @@
 
 	import Timer from "./Timer.svelte";
 	import Lap from "./Lap.svelte";
+	import Button from "../Button.svelte";
 
 	export let pomodoroList;
 
@@ -114,8 +116,8 @@
 					on:dragexit={(ev) => {
 						draggingOverIndex = null;
 					}}
-					in:receive|local={{ key: timer.id }}
-					out:send|local={{ key: timer.id }}
+					in:receive|local={{ key: index }}
+					out:send|local={{ key: index }}
 					animate:flip={{
 						duration: (d) => Math.sqrt(d * 360),
 					}}
@@ -155,6 +157,7 @@
 
 	.list-header {
 		display: flex;
+		align-items: center;
 		justify-content: space-between;
 		color: var(--grey-color);
 		margin-bottom: 16px;
@@ -179,7 +182,6 @@
 		height: 100%;
 		border-radius: 4px;
 		border: 2px dotted var(--accent-color);
-		transition: 0.15s linear;
 	}
 
 	.empty-list {

@@ -60,21 +60,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		column-gap: 12px;
-		padding: 12px 18px;
+		column-gap: 8px;
+		padding: 10px 14px;
 		background-color: transparent;
 		color: #000;
 		border: 2px solid #000;
 		border-radius: 100px;
 		cursor: pointer;
 		transition: 100ms ease;
-	}
-
-	@media only screen and (max-width: 600px) {
-		.button-container {
-			column-gap: 8px;
-			padding: 10px 14px;
-		}
 	}
 
 	.button-container:hover {
@@ -117,7 +110,7 @@
 	}
 
 	.smaller {
-		padding: 6px 9px;
+		padding: 5px 9px;
 	}
 
 	.grows {
